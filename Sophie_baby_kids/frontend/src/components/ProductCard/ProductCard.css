@@ -1,0 +1,52 @@
+.product-card{
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    transition: .3s;
+    font-family: 'Lato',sans-serif;
+}
+
+.product-card:hover{
+    transform: translateY(-5px);
+}
+
+.product-card img{
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.product-info{
+    padding: 16px;
+}
+
+.product-info h3{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.price{
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.product-info button{
+    width: 100%;
+    border: none;
+    background: var(--primary-pink);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.product-info button:hover{
+    background: var(--primary-blue);
+}

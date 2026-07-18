@@ -1,0 +1,22 @@
+.hero {
+    width: 100%;
+    min-height:420px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media(max-width:768px){
+    .hero{
+        min-height:320px;
+    }
+}
+
+@media(max-width:480px){
+    .hero{
+        min-height:230px;
+    }
+}

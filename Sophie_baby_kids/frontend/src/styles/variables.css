@@ -1,0 +1,10 @@
+:root{
+    --primary-blue: #32A0B9;
+    --primary-pink: #FF97C0;
+    --primary-yellow: #FEEA00;
+    
+    --white: #FFFFFF;
+    --text-dark: #353535;
+    --background: #FFFDF8;
+    --shadow: rgba(0,0,0,.12);
+}
