@@ -1,65 +1,81 @@
 .promotion-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 65%;
     height: 280px;
-
-    margin: -180px auto 40px auto;
-
-    position: relative;
-    z-index: 2;
-
-    background: #FFD9E8;
-    border-radius: 16px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    box-shadow: 0 6px 20px var(--shadow);
+    margin: -180px auto 40px;
     overflow: hidden;
+    border-radius: 16px;
+    background: #ffd9e8;
+    box-shadow: 0 6px 20px var(--shadow);
+    z-index: 2;
 }
 
-.arrow{
+.promotion-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.arrow {
     position: absolute;
-
     top: 50%;
-    transform: translateY(-50%);
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 45px;
     height: 45px;
-
-    font-size: 20px;
-
+    padding: 0;
+    border: none;
     border-radius: 50%;
-
-    background: rgba(255,255,255,.8);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 3;
-
+    background: rgba(255, 255, 255, 0.85);
+    color: #353535;
+    font-size: 22px;
     cursor: pointer;
+    transform: translateY(-50%);
+    transition: 0.3s ease;
+    z-index: 3;
 }
 
-.promotion-image{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    border-radius:5px;
+.arrow:hover {
+    background: var(--primary-pink);
+
+    color: white;
+
+    transform: translateY(-50%) scale(1.05);
 }
 
-.arrow:first-child{
+.arrow-left {
     left: 20px;
 }
 
-.arrow:last-child{
+.arrow-right {
     right: 20px;
 }
 
-@media(max-width:768px){
-    .promotion-banner{
-        margin-top:-80px;
+@media (max-width: 768px) {
+    .promotion-banner {
+        width: 85%;
+        height: 220px;
+
+        margin-top: -80px;
+    }
+
+    .arrow {
+        width: 38px;
+        height: 38px;
+
+        font-size: 18px;
+    }
+
+    .arrow-left {
+        left: 10px;
+    }
+
+    .arrow-right {
+        right: 10px;
     }
 }

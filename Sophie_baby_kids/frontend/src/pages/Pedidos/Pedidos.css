@@ -1,0 +1,181 @@
+.pedidos-page {
+    min-height: 100vh;
+    padding: 60px 20px 80px;
+    background: #fdfdfd;
+}
+
+.pedidos-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.pedidos-header {
+    margin-bottom: 35px;
+}
+
+.pedidos-header h1 {
+    margin-bottom: 10px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+}
+
+.pedidos-header p {
+    color: #666;
+    font-family: "Lato", sans-serif;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.order-card {
+    padding: 25px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+}
+
+.order-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.order-card-header h2 {
+    margin-bottom: 5px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+}
+
+.order-card-header span {
+    color: #777;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+}
+
+.order-card-header select {
+    padding: 9px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #555;
+    font-family: "Lato", sans-serif;
+    cursor: pointer;
+}
+
+.customer-info {
+    padding: 20px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.customer-info strong,
+.order-products > strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-family: "Poppins", sans-serif;
+}
+
+.customer-info p {
+    margin: 0;
+    color: #666;
+    font-family: "Lato", sans-serif;
+}
+
+.order-products {
+    padding: 20px 0;
+}
+
+.order-product {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+}
+
+.order-product img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f5f5f5;
+}
+
+.order-product h3 {
+    margin-bottom: 5px;
+    color: #333;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+}
+
+.order-product p {
+    margin: 2px 0;
+    color: #777;
+    font-family: "Lato", sans-serif;
+    font-size: 13px;
+}
+
+.order-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid #eeeeee;
+}
+
+.order-total span {
+    color: #555;
+    font-family: "Lato", sans-serif;
+}
+
+.order-total strong {
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+}
+
+.empty-orders {
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+}
+
+.empty-orders h2 {
+    margin-bottom: 10px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+}
+
+.empty-orders p {
+    color: #777;
+    font-family: "Lato", sans-serif;
+}
+
+@media (max-width: 600px) {
+    .pedidos-page {
+        padding: 40px 15px 60px;
+    }
+
+    .pedidos-container {
+        width: 100%;
+    }
+
+    .order-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .order-card-header select {
+        width: 100%;
+    }
+
+}

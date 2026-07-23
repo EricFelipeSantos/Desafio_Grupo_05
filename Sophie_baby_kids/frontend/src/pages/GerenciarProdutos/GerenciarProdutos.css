@@ -1,0 +1,178 @@
+.gerenciar-page {
+    min-height: 100vh;
+    padding: 60px 20px 80px;
+    background: #fdfdfd;
+}
+
+.gerenciar-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.gerenciar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.gerenciar-header h1 {
+    margin-bottom: 8px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+}
+
+.gerenciar-header p {
+    color: #666;
+    font-family: "Lato", sans-serif;
+}
+
+.new-product-button {
+    padding: 14px 22px;
+    border-radius: 10px;
+    background: var(--primary-pink);
+    color: white;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.new-product-button:hover {
+    background: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.products-table {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.product-admin-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px var(--shadow-light);
+}
+
+.product-admin-image {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f5f5f5;
+}
+
+.product-admin-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-admin-info {
+    flex: 1;
+}
+
+.product-admin-info h2 {
+    margin-bottom: 8px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+}
+
+.product-admin-info p {
+    margin-bottom: 8px;
+    color: #777;
+    font-family: "Lato", sans-serif;
+}
+
+.product-admin-info strong {
+    color: var(--primary-pink);
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+}
+
+.product-admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.edit-product-button,
+.delete-product-button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: "Lato", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.edit-product-button {
+    background: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+}
+
+.edit-product-button:hover {
+    background: #27879d;
+}
+
+.delete-product-button {
+    border: none;
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-product-button:hover {
+    background: #c0392b;
+}
+
+.empty-products {
+    padding: 50px;
+    text-align: center;
+    color: #777;
+    background: white;
+    border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+
+    .gerenciar-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .new-product-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .product-admin-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .product-admin-image {
+        width: 100%;
+        height: 220px;
+    }
+
+    .product-admin-actions {
+        width: 100%;
+    }
+
+    .edit-product-button,
+    .delete-product-button {
+        flex: 1;
+        text-align: center;
+    }
+}

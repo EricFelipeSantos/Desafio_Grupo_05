@@ -1,0 +1,484 @@
+.cadastro-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 60px 20px 80px;
+    background: #fdfdfd;
+}
+
+.cadastro-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px var(--shadow-light);
+}
+
+.cadastro-header {
+    margin-bottom: 35px;
+}
+
+.cadastro-header h1 {
+    margin-bottom: 10px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+}
+
+.cadastro-header p {
+    color: #666;
+    font-family: "Lato", sans-serif;
+    font-size: 16px;
+}
+
+.cadastro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #353535;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    color: #353535;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-blue);
+    box-shadow:
+        0 0 0 3px
+        rgba(50, 160, 185, 0.12);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.promotion-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 18px;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    background: #fffafa;
+}
+
+.promotion-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    color: #353535;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.promotion-checkbox input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--primary-pink);
+}
+
+.promotion-price {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.promotion-price label {
+    color: #353535;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.promotion-price input {
+    width: 100%;
+    max-width: 300px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 55px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    color: #555;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkbox-option:hover {
+    border-color: var(--primary-pink);
+    color: var(--primary-pink);
+}
+
+.checkbox-option input {
+    width: auto;
+    cursor: pointer;
+    accent-color: var(--primary-pink);
+}
+
+.color-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.color-form input[type="text"] {
+    flex: 1;
+}
+
+.color-form input[type="color"] {
+    width: 50px;
+    height: 45px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.add-color-button {
+    height: auto;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary-pink);
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.add-color-button:hover {
+    background: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.selected-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.selected-color {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 20px;
+    background: #fafafa;
+    color: #555;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+}
+
+.color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+
+.selected-color button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.selected-color button:hover {
+    color: var(--primary-pink);
+}
+
+
+.form-group input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.image-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(140px, 1fr)
+    );
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.image-preview {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid #eeeeee;
+    background: #f8f8f8;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-preview button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.image-preview button:hover {
+    background: var(--primary-pink);
+}
+
+
+.form-group small {
+    color: #777;
+    font-family: "Lato", sans-serif;
+    font-size: 13px;
+}
+
+.cadastro-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.cancel-cadastro-button,
+.submit-button {
+    padding: 13px 25px;
+    border: none;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cancel-cadastro-button {
+    background: #eeeeee;
+    color: #555;
+}
+
+.cancel-cadastro-button:hover {
+    background: #dddddd;
+}
+
+.submit-button {
+    width: auto;
+    margin-top: 0;
+    background: var(--primary-pink);
+    color: white;
+}
+
+.submit-button:hover {
+    background: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   PROMOÇÃO
+========================= */
+
+.promotion-group {
+    justify-content: flex-end;
+}
+
+.promotion-option {
+    width: fit-content;
+    min-width: auto;
+    padding: 10px 14px;
+    border: 1px solid var(--primary-pink);
+    border-radius: 10px;
+    background: white;
+    color: var(--primary-pink);
+    font-size: 14px;
+}
+
+.promotion-option:hover {
+    background: rgba(255, 151, 192, 0.08);
+}
+
+.promotion-option input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--primary-pink);
+}
+
+/* Preço promocional */
+
+#precoPromocional {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    color: #353535;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+#precoPromocional:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(50, 160, 185, 0.12);
+}
+
+@media (max-width: 768px) {
+    .cadastro-page {
+        padding: 40px 15px 60px;
+    }
+
+    .cadastro-container {
+        width: 100%;
+        padding: 30px 25px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .color-form {
+        flex-wrap: wrap;
+    }
+
+    .color-form input[type="text"] {
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .add-color-button {
+        flex: 1;
+    }
+
+    .cadastro-actions {
+        flex-direction: column;
+    }
+
+    .cancel-cadastro-button,
+    .submit-button {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .cadastro-page {
+        padding: 30px 10px 50px;
+    }
+
+    .cadastro-container {
+        padding: 25px 18px;
+        border-radius: 15px;
+    }
+
+    .cadastro-header h1 {
+        font-size: 26px;
+    }
+
+    .cadastro-header p {
+        font-size: 14px;
+    }
+
+    .checkbox-group {
+        gap: 8px;
+    }
+
+    .checkbox-option {
+        min-width: 50px;
+        padding: 9px 11px;
+    }
+
+    .color-form {
+        align-items: stretch;
+    }
+
+    .color-form input[type="color"] {
+        width: 100%;
+    }
+
+    .add-color-button {
+        width: 100%;
+    }
+
+}

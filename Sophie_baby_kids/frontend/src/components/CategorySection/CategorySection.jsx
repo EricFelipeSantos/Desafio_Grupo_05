@@ -1,8 +1,9 @@
-import '../CategorySection/CategorySection.css'
+import "../CategorySection/CategorySection.css";
 
 import { FaFilter } from "react-icons/fa";
 
 const categorias = [
+    "Todos",
     "Vestidos",
     "Conjuntos",
     "Meninas",
@@ -11,25 +12,51 @@ const categorias = [
     "Promoções"
 ];
 
-function CategorySection() {
+function CategorySection({
+    categoriaSelecionada,
+    onCategoriaSelecionada,
+    onAbrirFiltros
+}) {
     return (
-        <section className='category-section'>
-            <h2>Categorias</h2>
-            <div className='category-header'>
-                <div className='categorie-list'>
-                    {categorias.map((categoria)=>(
-                        <button key={categoria}>
+        <section className="category-section">
+            <h2>
+                Categorias
+            </h2>
+
+            <div className="category-header">
+                <div className="categorie-list">
+                    {categorias.map((categoria) => (
+                        <button
+                            key={categoria}
+                            className={
+                                categoriaSelecionada === categoria
+                                    ? "active"
+                                    : ""
+                            }
+                            onClick={() =>
+                                onCategoriaSelecionada(categoria)
+                            }
+                        >
                             {categoria}
                         </button>
+
                     ))}
+
                 </div>
-                    <button className='filter-button'>
-                        <FaFilter />
-                        Filtrar
-                    </button>
-                </div>
+
+                <button
+                    className="filter-button"
+                    onClick={onAbrirFiltros}
+                >
+                    <FaFilter />
+
+                    Filtrar
+                </button>
+
+            </div>
+
         </section>
-    )
+    );
 }
 
-export default CategorySection
+export default CategorySection;

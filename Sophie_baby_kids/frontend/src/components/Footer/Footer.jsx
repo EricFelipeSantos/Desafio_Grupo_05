@@ -5,6 +5,7 @@ import logo from "../../assets/logo.png"
 import {
     FaWhatsapp,
     FaInstagram,
+    FaFacebook,
     FaMapMarkerAlt,
     FaClock,
     FaCreditCard
@@ -30,6 +31,7 @@ function Footer() {
                     <h3>Contato</h3>
                     <p><FaWhatsapp /> (37) 99902-3869</p>
                     <p><FaInstagram /> @sophiebabykids</p>
+                    <p><FaFacebook /> Sophie Baby Kids</p>
                 </div>
 
                 <div className="footer-column">

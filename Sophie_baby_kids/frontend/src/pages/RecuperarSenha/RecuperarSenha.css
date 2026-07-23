@@ -1,0 +1,134 @@
+.recover-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 70px 20px 90px;
+    background: #fdfdfd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recover-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 45px 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px var(--shadow-light);
+}
+
+.recover-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.recover-header h1 {
+    margin-bottom: 12px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+}
+
+.recover-header p {
+    color: #666;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.recover-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.recover-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recover-form .form-group label {
+    color: #353535;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.recover-form .form-group input {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    color: #353535;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recover-form .form-group input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(50, 160, 185, 0.12);
+}
+
+.recover-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-pink);
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.recover-button:hover {
+    background: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.recover-message {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #eef9f1;
+    color: #2e7d32;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .recover-page {
+        padding: 50px 20px 70px;
+    }
+
+    .recover-container {
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .recover-page {
+        padding: 40px 15px 60px;
+    }
+
+    .recover-container {
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+
+    .recover-header h1 {
+        font-size: 26px;
+    }
+
+    .recover-header p {
+        font-size: 14px;
+    }
+}

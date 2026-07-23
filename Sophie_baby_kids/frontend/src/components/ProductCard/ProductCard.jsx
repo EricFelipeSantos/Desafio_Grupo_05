@@ -1,19 +1,87 @@
-import "../ProductCard/ProductCard.css"
+import "../ProductCard/ProductCard.css";
 
-function ProductCard({ imagem, nome, preco}) {
-    return(
-        <div className="product-card">
-            <img src={imagem} alt={nome}/>
+import { Link } from "react-router-dom";
 
-            <div className="product-info">
-                <h3>{nome}</h3>
+import formatPrice from "../../utils/formatPrice";
 
-                <p className="price">R$ {preco}</p>
+function ProductCard({
+    id,
+    imagem,
+    nome,
+    preco,
+    emPromocao,
+    precoPromocional
+}) {
+    const estaEmPromocao =
+        emPromocao &&
+        precoPromocional &&
+        Number(precoPromocional) < Number(preco);
 
-                <button>Ver produto</button>
+    return (
+        <Link
+            to={`/produtos/${id}`}
+            className="product-link"
+        >
+
+            <div className="product-card">
+
+                <div className="product-image-container">
+
+                    <img
+                        src={imagem}
+                        alt={nome}
+                    />
+
+                    {estaEmPromocao && (
+
+                        <span className="promotion-badge">
+                            OFERTA
+                        </span>
+
+                    )}
+
+                </div>
+
+                <div className="product-card-info">
+
+                    <h3>
+                        {nome}
+                    </h3>
+
+                    {estaEmPromocao ? (
+
+                        <div className="promotion-prices">
+
+                            <span className="original-price">
+                                {formatPrice(preco)}
+                            </span>
+
+                            <strong className="promotion-price">
+                                {formatPrice(
+                                    precoPromocional
+                                )}
+                            </strong>
+
+                        </div>
+
+                    ) : (
+
+                        <p className="price">
+                            {formatPrice(preco)}
+                        </p>
+
+                    )}
+
+                    <span className="details-button">
+                        Ver Produto
+                    </span>
+
+                </div>
+
             </div>
-        </div>
-    )
+
+        </Link>
+    );
 }
 
-export default ProductCard
+export default ProductCard;
