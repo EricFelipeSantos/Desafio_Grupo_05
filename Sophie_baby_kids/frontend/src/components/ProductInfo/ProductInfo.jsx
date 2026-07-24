@@ -71,9 +71,7 @@ function ProductInfo({
             tamanho: tamanhoSelecionado
         });
 
-        alert(
-            "Produto adicionado ao carrinho!"
-        );
+        alert("Produto adicionado ao carrinho!");
     }
 
     function comprarWhatsApp() {

@@ -182,7 +182,9 @@ function Produtos() {
                 const categoriaValida =
                     !categoriaSelecionada ||
                     produto.categoria?.toLowerCase() ===
-                    categoriaSelecionada.toLowerCase();
+                        categoriaSelecionada.toLowerCase() ||
+                    produto.publico?.toLowerCase() ===
+                        categoriaSelecionada.toLowerCase();
 
                 const precoMinimoValido =
                     !precoMinimo ||
