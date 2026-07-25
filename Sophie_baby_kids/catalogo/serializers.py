@@ -19,8 +19,10 @@ class ColecaoSerializer(serializers.ModelSerializer):
         model = Colecao
         fields = "__all__"
 
-
 class ProdutoSerializer(serializers.ModelSerializer):
+    categoria = serializers.StringRelatedField()
+    tamanho = serializers.StringRelatedField(many=True)
+    colecao = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Produto
