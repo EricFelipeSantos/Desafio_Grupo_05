@@ -6,32 +6,25 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
+import { FaPlus, FaTrash, FaArrowLeft, FaImage } from "react-icons/fa";
+
 function GerenciarBanners() {
     const navigate = useNavigate();
 
     const [banners, setBanners] = useState(() => {
         const bannersSalvos = localStorage.getItem("banners");
-
-        return bannersSalvos
-            ? JSON.parse(bannersSalvos)
-            : [];
+        return bannersSalvos ? JSON.parse(bannersSalvos) : [];
     });
 
-    const [imagemSelecionada, setImagemSelecionada] =
-        useState(null);
-
+    const [imagemSelecionada, setImagemSelecionada] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
     const inputImagemRef = useRef(null);
 
     function converterImagemParaDataURL(arquivo) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-
-            reader.onload = () => {
-                resolve(reader.result);
-            };
-
+            reader.onload = () => resolve(reader.result);
             reader.onerror = reject;
-
             reader.readAsDataURL(arquivo);
         });
     }
@@ -44,29 +37,20 @@ function GerenciarBanners() {
             return;
         }
 
-        const imagemConvertida =
-            await converterImagemParaDataURL(
-                imagemSelecionada
-            );
+        const imagemConvertida = await converterImagemParaDataURL(imagemSelecionada);
 
         const novoBanner = {
             id: Date.now(),
             imagem: imagemConvertida
         };
 
-        const novosBanners = [
-            ...banners,
-            novoBanner
-        ];
+        const novosBanners = [...banners, novoBanner];
 
         setBanners(novosBanners);
-
-        localStorage.setItem(
-            "banners",
-            JSON.stringify(novosBanners)
-        );
+        localStorage.setItem("banners", JSON.stringify(novosBanners));
 
         setImagemSelecionada(null);
+        setPreviewUrl(null);
 
         if (inputImagemRef.current) {
             inputImagemRef.current.value = "";
@@ -76,35 +60,22 @@ function GerenciarBanners() {
     }
 
     function removerBanner(id) {
-        const confirmar =
-            window.confirm(
-                "Deseja realmente remover este banner?"
-            );
+        const confirmar = window.confirm("Deseja realmente remover este banner?");
 
-        if (!confirmar) {
-            return;
-        }
+        if (!confirmar) return;
 
-        const novosBanners =
-            banners.filter(
-                (banner) =>
-                    banner.id !== id
-            );
+        const novosBanners = banners.filter((banner) => banner.id !== id);
 
         setBanners(novosBanners);
-
-        localStorage.setItem(
-            "banners",
-            JSON.stringify(novosBanners)
-        );
+        localStorage.setItem("banners", JSON.stringify(novosBanners));
     }
 
     function selecionarImagem(event) {
-        const arquivo =
-            event.target.files[0];
+        const arquivo = event.target.files[0];
 
         if (arquivo) {
             setImagemSelecionada(arquivo);
+            setPreviewUrl(URL.createObjectURL(arquivo));
         }
     }
 
@@ -116,105 +87,65 @@ function GerenciarBanners() {
                 <section className="gerenciar-banners-container">
                     <div className="gerenciar-banners-header">
                         <h1>
-                            Gerenciar Banners
+                            <FaImage /> Gerenciar Banners
                         </h1>
-
-                        <p>
-                            Adicione ou remova os banners promocionais exibidos na página inicial.
-                        </p>
+                        <p>Adicione ou remova os banners promocionais exibidos na página inicial.</p>
                     </div>
 
-                    <form
-                        className="banner-form"
-                        onSubmit={adicionarBanner}
-                    >
+                    <form className="banner-form" onSubmit={adicionarBanner}>
                         <div className="form-group">
-                            <label htmlFor="banner">
-                                Imagem do banner
-                            </label>
+                            <label htmlFor="banner">Imagem do banner</label>
 
-                            <input
-                                ref={inputImagemRef}
-                                type="file"
-                                id="banner"
-                                accept="image/*"
-                                onChange={
-                                    selecionarImagem
-                                }
-                            />
-
-                            <small>
-                                Escolha uma imagem para adicionar aos banners promocionais.
-                            </small>
-                        </div>
-
-                        {imagemSelecionada && (
-                            <div className="banner-preview">
-                                <img
-                                    src={
-                                        URL.createObjectURL(
-                                            imagemSelecionada
-                                        )
-                                    }
-                                    alt="Pré-visualização do banner"
+                            <div className="file-input-wrapper">
+                                <input
+                                    ref={inputImagemRef}
+                                    type="file"
+                                    id="banner"
+                                    accept="image/*"
+                                    onChange={selecionarImagem}
                                 />
-
+                                <span className="file-input-label">
+                                    {imagemSelecionada ? imagemSelecionada.name : "Clique para selecionar uma imagem"}
+                                </span>
                             </div>
 
+                            <small>Escolha uma imagem para adicionar aos banners promocionais.</small>
+                        </div>
+
+                        {previewUrl && (
+                            <div className="banner-preview">
+                                <img src={previewUrl} alt="Pré-visualização do banner" />
+                                <span className="preview-label">Pré-visualização</span>
+                            </div>
                         )}
 
-                        <button
-                            type="submit"
-                            className="add-banner-button"
-                        >
-                            Adicionar Banner
+                        <button type="submit" className="add-banner-button">
+                            <FaPlus /> Adicionar Banner
                         </button>
                     </form>
 
                     <section className="banners-list-section">
-                        <h2>
-                            Banners cadastrados
-                        </h2>
+                        <h2>Banners cadastrados</h2>
 
                         {banners.length === 0 ? (
                             <div className="no-banners">
-                                <p>
-                                    Nenhum banner cadastrado.
-                                </p>
+                                <p>Nenhum banner cadastrado.</p>
                             </div>
-
                         ) : (
                             <div className="banners-grid">
-                                {banners.map(
-                                    (banner) => (
-                                        <article
-                                            className="banner-card"
-                                            key={
-                                                banner.id
-                                            }
+                                {banners.map((banner) => (
+                                    <article className="banner-card" key={banner.id}>
+                                        <img src={banner.imagem} alt="Banner promocional" />
+
+                                        <button
+                                            type="button"
+                                            className="remove-banner-button"
+                                            onClick={() => removerBanner(banner.id)}
                                         >
-
-                                            <img
-                                                src={
-                                                    banner.imagem
-                                                }
-                                                alt="Banner promocional"
-                                            />
-
-                                            <button
-                                                type="button"
-                                                className="remove-banner-button"
-                                                onClick={() =>
-                                                    removerBanner(
-                                                        banner.id
-                                                    )
-                                                }
-                                            >
-                                                Remover banner
-                                            </button>
-                                        </article>
-                                    )
-                                )}
+                                            <FaTrash /> Remover banner
+                                        </button>
+                                    </article>
+                                ))}
                             </div>
                         )}
                     </section>
@@ -222,13 +153,9 @@ function GerenciarBanners() {
                     <button
                         type="button"
                         className="back-button"
-                        onClick={() =>
-                            navigate(
-                                "/gerenciar-produtos"
-                            )
-                        }
+                        onClick={() => navigate("/dashboard")}
                     >
-                        Voltar
+                        <FaArrowLeft /> Voltar ao Dashboard
                     </button>
                 </section>
             </main>

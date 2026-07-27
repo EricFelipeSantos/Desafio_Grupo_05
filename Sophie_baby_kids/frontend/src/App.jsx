@@ -10,122 +10,34 @@ import CadastroProduto from "./pages/CadastroProduto/CadastroProduto";
 import ProdutoDetalhes from "./pages/ProdutoDetalhes/ProdutoDetalhes";
 import Produtos from "./pages/Produtos/Produtos";
 import Carrinho from "./pages/Carrinho/Carrinho";
-import CadastroCliente from "./pages/CadastroCliente/CadastroCliente";
 import Checkout from "./pages/Checkout/Checkout";
-import RotaProtegida from "./components/RotaProtegida/RotaProtegida";
-import RotaAdmin from "./components/RotaAdmin/RotaAdmin";
-import RecuperarSenha from "./pages/RecuperarSenha/RecuperarSenha";
 import GerenciarProdutos from "./pages/GerenciarProdutos/GerenciarProdutos";
 import EditarProduto from "./pages/EditarProduto/EditarProduto";
 import Pedidos from "./pages/Pedidos/Pedidos";
 import GerenciarBanners from "./pages/GerenciarBanners/GerenciarBanners";
+import PedidoConfirmado from "./pages/PedidoConfirmado/PedidoConfirmado";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route
-                    path="/"
-                    element={<Home />}
-                />
+                {/* Rotas Públicas */}
+                <Route path="/" element={<Home />} />
+                <Route path="/produtos" element={<Produtos />} />
+                <Route path="/produtos/:id" element={<ProdutoDetalhes />} />
+                <Route path="/carrinho" element={<Carrinho />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/contato" element={<Contato />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/pedido-confirmado" element={<PedidoConfirmado />} />
 
-                <Route
-                    path="/produtos"
-                    element={<Produtos />}
-                />
-
-                <Route
-                    path="/produtos/:id"
-                    element={<ProdutoDetalhes />}
-                />
-
-                <Route
-                    path="/carrinho"
-                    element={<Carrinho />}
-                />
-
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
-
-                <Route
-                    path="/recuperar-senha"
-                    element={<RecuperarSenha />}
-                />
-
-                <Route
-                    path="/cadastro"
-                    element={<CadastroCliente />}
-                />
-
-                <Route
-                    path="/checkout"
-                    element={
-                        <RotaProtegida>
-                            <Checkout />
-                        </RotaProtegida>
-                    }
-                />
-
-                <Route
-                    path="/dashboard"
-                    element={
-                        <RotaAdmin>
-                            <Dashboard />
-                        </RotaAdmin>
-                    }
-                />
-
-                <Route
-                    path="/gerenciar-banners"
-                    element={
-                        <RotaAdmin>
-                            <GerenciarBanners />
-                        </RotaAdmin>
-                    }
-                />
-                <Route
-                    path="/produto/novo"
-                    element={
-                        <RotaAdmin>
-                            <CadastroProduto />
-                        </RotaAdmin>
-                    }
-                />
-
-                <Route
-                    path="/gerenciar-produtos"
-                    element={
-                        <RotaAdmin>
-                            <GerenciarProdutos />
-                        </RotaAdmin>
-                    }
-                />
-
-                <Route
-                    path="/produto/editar/:id"
-                    element={
-                        <RotaAdmin>
-                            <EditarProduto />
-                        </RotaAdmin>
-                    }
-                />
-
-                <Route
-                    path="/pedidos"
-                    element={
-                        <RotaAdmin>
-                            <Pedidos />
-                        </RotaAdmin>
-                    }
-                />
-
-                <Route
-                    path="/contato"
-                    element={<Contato />}
-                />
-
+                {/* Rotas Administrativas */}
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/produto/novo" element={<CadastroProduto />} />
+                <Route path="/gerenciar-produtos" element={<GerenciarProdutos />} />
+                <Route path="/produto/editar/:id" element={<EditarProduto />} />
+                <Route path="/pedidos" element={<Pedidos />} />
+                <Route path="/gerenciar-banners" element={<GerenciarBanners />} />
             </Routes>
         </BrowserRouter>
     );

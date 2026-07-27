@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import Produto, Categoria, Tamanho, Colecao
 from .serializers import (
@@ -23,7 +24,7 @@ class ProdutoViewSet(ModelViewSet):
 
     filterset_fields = [
         "categoria",
-        "genero",
+        "publico",   # mudança: "genero" para "publico"
         "em_promocao",
         "colecao",
         "tamanho",
@@ -37,6 +38,12 @@ class ProdutoViewSet(ModelViewSet):
     ordering_fields = [
         "nome",
         "preco",
+    ]
+    
+    # adicionei: parsers para receber imagens
+    parser_classes = [
+        MultiPartParser,
+        FormParser,
     ]
 
     ordering = ["nome"]

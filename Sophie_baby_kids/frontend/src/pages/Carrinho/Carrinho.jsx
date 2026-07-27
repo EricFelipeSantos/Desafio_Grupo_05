@@ -6,8 +6,9 @@ import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 
 import { useCart } from "../../context/CartContext/CartContext";
+import { useProducts } from "../../context/ProductContext/ProductContext"; 
 
-import { FaTrash, FaMinus, FaPlus } from "react-icons/fa";
+import { FaTrash, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 
 function Carrinho() {
     const {
@@ -15,35 +16,33 @@ function Carrinho() {
         removeFromCart,
         increaseQuantity,
         decreaseQuantity,
-        generateWhatsAppMessage
+        totalItems,
+        totalPrice, 
+        getProductPrice, 
+        formatPrice 
     } = useCart();
 
-    const total = cartItems.reduce(
-        (total, item) =>
-            total + item.preco * item.quantidade,
-        0
-    );
+    const { getImageUrl } = useProducts();
 
-    function formatarPreco(valor) {
-        return valor.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
+    function obterImagem(imagem) {
+        if (!imagem) return null;
+        
+        if (typeof imagem === "object" && imagem.imagem) {
+            return getImageUrl(imagem.imagem);
+        }
+        
+        if (typeof imagem === "string") {
+            return getImageUrl(imagem);
+        }
+        
+        return null;
     }
 
-    function finalizarCompra() {
-        const telefone = "5537999023869";
-
-        const mensagem = generateWhatsAppMessage();
-
-        const whatsappUrl =
-            `https://wa.me/${telefone}?text=${mensagem}`;
-
-        window.open(
-            whatsappUrl,
-            "_blank"
-        );
+    function getItemSubtotal(item) {
+        const preco = getProductPrice(item);
+        return preco * item.quantidade;
     }
+
     return (
         <>
             <Navbar />
@@ -52,7 +51,7 @@ function Carrinho() {
                 <div className="cart-container">
                     <div className="cart-header">
                         <h1>
-                            Meu Carrinho
+                            <FaShoppingCart /> Meu Carrinho
                         </h1>
 
                         <p>
@@ -62,131 +61,175 @@ function Carrinho() {
 
                     {cartItems.length === 0 ? (
                         <div className="empty-cart">
-                            <h2>
-                                Seu carrinho está vazio
-                            </h2>
-
-                            <p>
-                                Adicione produtos para começar sua compra.
-                            </p>
+                            <h2>Seu carrinho está vazio</h2>
+                            <p>Adicione produtos para começar sua compra.</p>
+                            
+                            <Link to="/produtos" className="continue-shopping">
+                                Continuar comprando
+                            </Link>
                         </div>
                     ) : (
                         <div className="cart-content">
                             <section className="cart-products">
-                                {cartItems.map((item) => (
-                                    <article
-                                        className="cart-item"
-                                        key={`${item.id}-${item.tamanho}-${item.cor?.nome}`}
-                                    >
-                                        <img
-                                            src={item.imagem}
-                                            alt={item.nome}
-                                        />
+                                {cartItems.map((item) => {
+                                    const imagemProduto = obterImagem(item.imagem);
+                                    const precoProduto = getProductPrice(item);
+                                    const subtotal = getItemSubtotal(item);
 
-                                        <div className="cart-item-info">
-                                            <h2>
-                                                {item.nome}
-                                            </h2>
-
-                                            <p className="cart-item-price">
-                                                {formatarPreco(item.preco)}
-                                            </p>
-
-                                            <p>
-                                                Tamanho: {item.tamanho}
-                                            </p>
-
-                                            <p>
-                                                Cor: {item.cor?.nome}
-                                            </p>
-
-                                            <div className="quantity-control">
-                                                <button
-                                                    onClick={() =>
-                                                        decreaseQuantity(
-                                                            item.id,
-                                                            item.tamanho,
-                                                            item.cor
-                                                        )
-                                                    }
-                                                >
-                                                    <FaMinus />
-                                                </button>
-
-                                                <span>
-                                                    {item.quantidade}
-                                                </span>
-
-                                                <button
-                                                    onClick={() =>
-                                                        increaseQuantity(
-                                                            item.id,
-                                                            item.tamanho,
-                                                            item.cor
-                                                        )
-                                                    }
-                                                >
-                                                    <FaPlus />
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            className="remove-item"
-                                            onClick={() =>
-                                                removeFromCart(
-                                                    item.id,
-                                                    item.tamanho,
-                                                    item.cor
-                                                )
-                                            }
+                                    return (
+                                        <article
+                                            className="cart-item"
+                                            key={`${item.id}-${item.tamanho}-${item.cor?.nome || ""}`}
                                         >
-                                            <FaTrash />
-                                        </button>
-                                    </article>
-                                ))}
+                                            {imagemProduto ? (
+                                                <img
+                                                    src={imagemProduto}
+                                                    alt={item.nome}
+                                                    loading="lazy"
+                                                />
+                                            ) : (
+                                                <div className="cart-item-placeholder">
+                                                    <FaShoppingCart />
+                                                </div>
+                                            )}
+
+                                            <div className="cart-item-info">
+                                                <h2>{item.nome}</h2>
+
+                                                <div className="cart-item-prices">
+                                                    {item.em_promocao && item.preco_promocional && (
+                                                        <span className="original-price">
+                                                            {formatPrice(item.preco)}
+                                                        </span>
+                                                    )}
+                                                    <p className="cart-item-price">
+                                                        {formatPrice(precoProduto)}
+                                                    </p>
+                                                </div>
+
+                                                {item.tamanho && (
+                                                    <p className="item-detail">
+                                                        <strong>Tamanho:</strong> {item.tamanho}
+                                                    </p>
+                                                )}
+
+                                                {item.cor && (
+                                                    <p className="item-detail">
+                                                        <strong>Cor:</strong> 
+                                                        <span 
+                                                            className="color-dot"
+                                                            style={{ backgroundColor: item.cor.codigo }}
+                                                        />
+                                                        {item.cor.nome}
+                                                    </p>
+                                                )}
+
+                                                <div className="quantity-control">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            decreaseQuantity(
+                                                                item.id,
+                                                                item.tamanho,
+                                                                item.cor
+                                                            )
+                                                        }
+                                                        disabled={item.quantidade <= 1}
+                                                    >
+                                                        <FaMinus />
+                                                    </button>
+
+                                                    <span>{item.quantidade}</span>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            increaseQuantity(
+                                                                item.id,
+                                                                item.tamanho,
+                                                                item.cor
+                                                            )
+                                                        }
+                                                    >
+                                                        <FaPlus />
+                                                    </button>
+                                                </div>
+
+                                                <p className="item-subtotal">
+                                                    Subtotal: {formatPrice(subtotal)}
+                                                </p>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className="remove-item"
+                                                onClick={() =>
+                                                    removeFromCart(
+                                                        item.id,
+                                                        item.tamanho,
+                                                        item.cor
+                                                    )
+                                                }
+                                                title="Remover item"
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </article>
+                                    );
+                                })}
                             </section>
 
                             <aside className="cart-summary">
-                                <h2>
-                                    Resumo da compra
-                                </h2>
+                                <h2>Resumo da compra</h2>
 
                                 <div className="summary-line">
                                     <span>
-                                        Produtos
+                                        Produtos ({totalItems} {totalItems === 1 ? "item" : "itens"})
                                     </span>
-
-                                    <span>
-                                        {formatarPreco(total)}
-                                    </span>
+                                    <span>{formatPrice(totalPrice)}</span>
                                 </div>
 
                                 <div className="summary-line">
-                                    <span>
-                                        Frete
-                                    </span>
-
-                                    <span>
-                                        A calcular
-                                    </span>
+                                    <span>Frete</span>
+                                    <span>A calcular</span>
                                 </div>
+
+                                {cartItems.some(item => item.em_promocao) && (
+                                    <div className="summary-line discount">
+                                        <span>Descontos</span>
+                                        <span>
+                                            -{formatPrice(
+                                                cartItems.reduce((total, item) => {
+                                                    if (item.em_promocao && item.preco_promocional) {
+                                                        const desconto = (Number(item.preco) - Number(item.preco_promocional)) * item.quantidade;
+                                                        return total + desconto;
+                                                    }
+                                                    return total;
+                                                }, 0)
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
+
+                                <div className="summary-divider" />
 
                                 <div className="summary-total">
-                                    <span>
-                                        Total
-                                    </span>
-
-                                    <strong>
-                                        {formatarPreco(total)}
-                                    </strong>
+                                    <span>Total</span>
+                                    <strong>{formatPrice(totalPrice)}</strong>
                                 </div>
 
-                                <Link 
+                                <Link
                                     className="checkout-button"
-                                    to="/checkout"    
+                                    to="/checkout"
                                 >
                                     Finalizar compra
+                                </Link>
+
+                                <Link
+                                    className="continue-shopping-link"
+                                    to="/produtos"
+                                >
+                                    Continuar comprando
                                 </Link>
                             </aside>
                         </div>

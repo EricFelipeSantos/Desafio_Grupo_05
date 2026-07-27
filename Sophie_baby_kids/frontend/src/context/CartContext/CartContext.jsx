@@ -1,9 +1,24 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState(() => {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            try {
+                return JSON.parse(savedCart);
+            } catch (error) {
+                console.error('Erro ao carregar carrinho:', error);
+                return [];
+            }
+        }
+        return [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }, [cartItems]);
 
     function addToCart(product) {
         setCartItems((currentItems) => {
@@ -21,7 +36,7 @@ export function CartProvider({ children }) {
                     item.cor?.nome === product.cor?.nome
                         ? {
                             ...item,
-                            quantidade: item.quantidade + 1
+                            quantidade: item.quantidade + (product.quantidade || 1)
                         }
                         : item
                 );
@@ -31,7 +46,7 @@ export function CartProvider({ children }) {
                 ...currentItems,
                 {
                     ...product,
-                    quantidade: 1
+                    quantidade: product.quantidade || 1
                 }
             ];
         });
@@ -82,88 +97,90 @@ export function CartProvider({ children }) {
         );
     }
 
+    function getProductPrice(item) {
+        if (
+            item.em_promocao &&
+            item.preco_promocional &&
+            Number(item.preco_promocional) < Number(item.preco)
+        ) {
+            return Number(item.preco_promocional);
+        }
+        return Number(item.preco);
+    }
+
     const totalItems = cartItems.reduce(
-        (total, item) =>
-            total + item.quantidade,
+        (total, item) => total + item.quantidade,
         0
     );
 
+    const totalPrice = cartItems.reduce(
+        (total, item) => total + getProductPrice(item) * item.quantidade,
+        0
+    );
+
+    function clearCart() {
+        setCartItems([]);
+    }
+
     function generateWhatsAppMessage(formaPagamento) {
-        let message =
-            "Olá! Gostaria de fazer um pedido.%0A%0A";
+        if (cartItems.length === 0) {
+            return "";
+        }
 
-        message +=
-            "*PEDIDO*%0A";
+        const linhas = [
+            "*NOVO PEDIDO*",
+            "",
+            "*Produtos:*",
+            ""
+        ];
 
-        cartItems.forEach((item) => {
-            message +=
-                `• ${item.nome}%0A`;
-
-            message +=
-                `Quantidade: ${item.quantidade}%0A`;
-
-            message +=
-                `Tamanho: ${item.tamanho}%0A`;
-
-            message +=
-                `Cor: ${item.cor?.nome || ""}%0A`;
-
-            const subtotal =
-                item.preco *
-                item.quantidade;
-
-            const subtotalFormatado =
-                subtotal.toLocaleString(
-                    "pt-BR",
-                    {
-                        style: "currency",
-                        currency: "BRL"
-                    }
-                );
-
-            message +=
-                `Subtotal: ${subtotalFormatado}%0A%0A`;
+        cartItems.forEach((item, index) => {
+            const precoProduto = getProductPrice(item);
+            const subtotal = precoProduto * item.quantidade;
+            
+            linhas.push(`${index + 1}. *${item.nome}*`);
+            linhas.push(`   Quantidade: ${item.quantidade}`);
+            linhas.push(`   Tamanho: ${item.tamanho}`);
+            linhas.push(`   Cor: ${item.cor?.nome || "Não especificada"}`);
+            linhas.push(`   Preço unitário: ${formatPrice(precoProduto)}`);
+            linhas.push(`   Subtotal: ${formatPrice(subtotal)}`);
+            linhas.push("");
         });
 
-        const total = cartItems.reduce(
-            (total, item) =>
-                total +
-                item.preco *
-                item.quantidade,
-            0
-        );
+        linhas.push(`*Total do Pedido:* ${formatPrice(totalPrice)}`);
+        linhas.push(`*Forma de pagamento:* ${formaPagamento}`);
+        linhas.push("");
+        linhas.push("Aguardo a confirmação do pedido.");
+        linhas.push("Obrigado(a)!");
 
-        const totalFormatado =
-            total.toLocaleString(
-                "pt-BR",
-                {
-                    style: "currency",
-                    currency: "BRL"
-                }
-            );
-
-        message +=
-            `*Total: ${totalFormatado}*%0A`;
-
-        message +=
-            `Forma de pagamento: ${formaPagamento}%0A%0A`;
-
-        message +=
-            "Aguardo a confirmação do pedido. Obrigado(a)!";
-
-        return message;
+        const mensagem = linhas.join("\n");
+        return encodeURIComponent(mensagem);
     }
+
+    function formatPrice(value) {
+        return value.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    }
+
+    const isCartEmpty = cartItems.length === 0;
 
     return (
         <CartContext.Provider
             value={{
                 cartItems,
                 totalItems,
+                totalPrice,
+                isCartEmpty,
                 addToCart,
                 removeFromCart,
                 increaseQuantity,
                 decreaseQuantity,
-                generateWhatsAppMessage
+                clearCart,
+                generateWhatsAppMessage,
+                getProductPrice,
+                formatPrice
             }}
         >
             {children}
@@ -172,5 +189,9 @@ export function CartProvider({ children }) {
 }
 
 export function useCart() {
-    return useContext(CartContext);
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error('useCart must be used within a CartProvider');
+    }
+    return context;
 }

@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -13,13 +12,27 @@ import { useProducts } from "../../context/ProductContext/ProductContext";
 
 function Home() {
     const navigate = useNavigate();
+    const { produtos, carregando } = useProducts();
 
-    const { produtos } = useProducts();
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
 
-    const [
-        categoriaSelecionada,
-        setCategoriaSelecionada
-    ] = useState("Todos");
+    const categoriasDisponiveis = [
+        "Todos",
+        "Promoções",
+        ...new Set(
+            produtos
+                .map(p => p.categoria?.nome)
+                .filter(Boolean)
+        )
+    ];
+
+    useEffect(() => {
+        if (categoriaSelecionada !== "Todos" && 
+            categoriaSelecionada !== "Promoções" &&
+            !categoriasDisponiveis.includes(categoriaSelecionada)) {
+            setCategoriaSelecionada("Todos");
+        }
+    }, [produtos, categoriaSelecionada, categoriasDisponiveis]);
 
     function selecionarCategoria(categoria) {
         setCategoriaSelecionada(categoria);
@@ -33,33 +46,38 @@ function Home() {
         navigate("/produtos");
     }
 
-    const produtosFiltrados =
-        categoriaSelecionada === "Todos" ? produtos : categoriaSelecionada === "Promoções" ? produtos.filter(
-            (produto) =>
-                produto.emPromocao === true &&
-                Number(
-                    produto.precoPromocional
-                ) <
-                Number(
-                    produto.preco
-                )
-        ) : produtos.filter(
-            (produto) => {
-                    const categoria =
-                        produto.categoria?.toLowerCase();
+    const produtosFiltrados = produtos.filter((produto) => {
+        if (categoriaSelecionada === "Todos") {
+            return true;
+        }
 
-                    const publico =
-                        produto.publico?.toLowerCase();
-
-                    const filtro =
-                        categoriaSelecionada.toLowerCase();
-
-                    return (
-                        categoria === filtro ||
-                        publico === filtro
-                    );
-                }
+        if (categoriaSelecionada === "Promoções") {
+            return (
+                produto.em_promocao === true &&
+                produto.preco_promocional &&
+                Number(produto.preco_promocional) < Number(produto.preco)
             );
+        }
+
+        const nomeCategoria = produto.categoria?.nome?.toLowerCase() || "";
+        const publico = produto.publico?.toLowerCase() || "";
+        const filtro = categoriaSelecionada.toLowerCase();
+
+        return nomeCategoria === filtro || publico === filtro;
+    });
+
+    if (carregando) {
+        return (
+            <>
+                <Navbar />
+                <div className="loading-container">
+                    <p>Carregando produtos...</p>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
     return (
         <>
             <Navbar />
@@ -72,12 +90,15 @@ function Home() {
                 categoriaSelecionada={categoriaSelecionada}
                 onCategoriaSelecionada={selecionarCategoria}
                 onAbrirFiltros={abrirFiltros}
+                categoriasDisponiveis={categoriasDisponiveis}
+                produtos={produtos}
             />
 
             <ProductsSection
                 produtos={produtosFiltrados}
                 categoriaSelecionada={categoriaSelecionada}
                 onVerTodosProdutos={verTodosProdutos}
+                carregando={carregando}
             />
 
             <Footer />

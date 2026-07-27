@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { useSearchParams } from "react-router-dom";
-
 import { FaFilter, FaTimes } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -13,13 +11,17 @@ import { useProducts } from "../../context/ProductContext/ProductContext";
 import "./Produtos.css";
 
 function Produtos() {
-    const { produtos } = useProducts();
+    const { produtos, getImageUrl } = useProducts();
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [categoriaSelecionada, setCategoriaSelecionada] = useState(searchParams.get("categoria") || "");
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState(
+        searchParams.get("categoria") || ""
+    );
 
-    const [busca, setBusca] = useState(searchParams.get("busca") || "");
+    const [busca, setBusca] = useState(
+        searchParams.get("busca") || ""
+    );
 
     const [precoMinimo, setPrecoMinimo] = useState("");
 
@@ -35,94 +37,56 @@ function Produtos() {
 
     const categorias = [
         "Todas",
-        "Vestidos",
-        "Conjuntos",
-        "Meninas",
-        "Meninos",
-        "Bebês",
-        "Unissex"
+        ...new Set(
+            produtos
+                .map(p => p.categoria?.nome)
+                .filter(Boolean)
+        )
     ];
 
     const tamanhos = [
-        "RN",
-        "P",
-        "M",
-        "G",
-        "GG",
-        "1",
-        "2",
-        "3",
-        "4",
-        "6",
-        "8",
-        "10",
-        "12",
-        "14",
-        "16"
+        ...new Set(
+            produtos
+                .flatMap(p => p.tamanho?.map(t => t.nome) || [])
+                .filter(Boolean)
+        )
     ];
 
     useEffect(() => {
         const categoriaURL = searchParams.get("categoria") || "";
-
         const buscaURL = searchParams.get("busca") || "";
-
-        const filtrosURL =
-            searchParams.get("filtros") === "true";
+        const filtrosURL = searchParams.get("filtros") === "true";
 
         setCategoriaSelecionada(categoriaURL);
-
         setBusca(buscaURL);
-
         setFiltrosAbertos(filtrosURL);
-
     }, [searchParams]);
 
     function selecionarCategoria(categoria) {
+        const novosParametros = new URLSearchParams(searchParams);
+
         if (categoria === "Todas") {
             setCategoriaSelecionada("");
-
-            const novosParametros = new URLSearchParams(
-                searchParams
-            );
-
             novosParametros.delete("categoria");
-
             setSearchParams(novosParametros);
-
             return;
         }
 
         setCategoriaSelecionada(categoria);
-
-        const novosParametros = new URLSearchParams(
-            searchParams
-        );
-
-        novosParametros.set(
-            "categoria",
-            categoria
-        );
-
+        novosParametros.set("categoria", categoria);
         setSearchParams(novosParametros);
     }
 
     function alterarCategoriaFiltro(event) {
         const categoria = event.target.value;
-
         setCategoriaSelecionada(categoria);
 
-        const novosParametros = new URLSearchParams(
-            searchParams
-        );
+        const novosParametros = new URLSearchParams(searchParams);
 
         if (categoria === "") {
             novosParametros.delete("categoria");
-
         } else {
-            novosParametros.set(
-                "categoria",
-                categoria
-            );
+            novosParametros.set("categoria", categoria);
         }
 
         setSearchParams(novosParametros);
@@ -130,105 +94,69 @@ function Produtos() {
 
     function limparFiltros() {
         setCategoriaSelecionada("");
-
         setBusca("");
-
         setPrecoMinimo("");
-
         setPrecoMaximo("");
-
         setTamanhoSelecionado("");
-
         setSomentePromocoes(false);
-
         setSearchParams({});
-
     }
 
-    const produtosFiltrados =
-        produtos.filter(
-            (produto) => {
-                const precoProduto =
-                    produto.emPromocao &&
-                    produto.precoPromocional &&
-                    Number(
-                        produto.precoPromocional
-                    ) <
-                    Number(
-                        produto.preco
-                    )
-                        ? Number(
-                            produto.precoPromocional
-                        )
-                        : Number(
-                            produto.preco
-                        );
+    const produtosFiltrados = produtos.filter((produto) => {
+        const precoProduto =
+            produto.em_promocao &&
+            produto.preco_promocional &&
+            Number(produto.preco_promocional) < Number(produto.preco)
+                ? Number(produto.preco_promocional)
+                : Number(produto.preco);
 
-                const buscaValida =
-                    !busca ||
-                    produto.nome?.toLowerCase().includes(
-                        busca.toLowerCase()
-                    ) ||
-                    produto.categoria?.toLowerCase().includes(
-                        busca.toLowerCase()
-                    ) ||
-                    produto.publico?.toLowerCase().includes(
-                        busca.toLowerCase()
-                    ) ||
-                    produto.descricao?.toLowerCase().includes(
-                        busca.toLowerCase()
-                    );
+        const nomeCategoria = produto.categoria?.nome?.toLowerCase() || "";
+        const nomePublico = produto.publico?.toLowerCase() || "";
+        const nomeProduto = produto.nome?.toLowerCase() || "";
+        const descricaoProduto = produto.descricao?.toLowerCase() || "";
 
-                const categoriaValida =
-                    !categoriaSelecionada ||
-                    produto.categoria?.toLowerCase() ===
-                        categoriaSelecionada.toLowerCase() ||
-                    produto.publico?.toLowerCase() ===
-                        categoriaSelecionada.toLowerCase();
+        const buscaNormalizada = busca.toLowerCase();
+        const categoriaNormalizada = categoriaSelecionada.toLowerCase();
 
-                const precoMinimoValido =
-                    !precoMinimo ||
-                    precoProduto >=
-                    Number(
-                        precoMinimo
-                    );
+        const buscaValida =
+            !busca ||
+            nomeProduto.includes(buscaNormalizada) ||
+            nomeCategoria.includes(buscaNormalizada) ||
+            nomePublico.includes(buscaNormalizada) ||
+            descricaoProduto.includes(buscaNormalizada);
 
-                const precoMaximoValido =
-                    !precoMaximo ||
-                    precoProduto <=
-                    Number(
-                        precoMaximo
-                    );
+        const categoriaValida =
+            !categoriaSelecionada ||
+            nomeCategoria === categoriaNormalizada ||
+            nomePublico === categoriaNormalizada;
 
-                const tamanhoValido =
-                    !tamanhoSelecionado ||
-                    produto.tamanhos?.includes(
-                        tamanhoSelecionado
-                    );
+        const precoMinimoValido =
+            !precoMinimo || precoProduto >= Number(precoMinimo);
 
-                const promocaoValida =
-                    !somentePromocoes ||
-                    (
-                        produto.emPromocao &&
-                        produto.precoPromocional &&
-                        Number(
-                            produto.precoPromocional
-                        ) <
-                        Number(
-                            produto.preco
-                        )
-                    );
+        const precoMaximoValido =
+            !precoMaximo || precoProduto <= Number(precoMaximo);
 
-                return (
-                    buscaValida &&
-                    categoriaValida &&
-                    precoMinimoValido &&
-                    precoMaximoValido &&
-                    tamanhoValido &&
-                    promocaoValida
-                );
-            }
+        const tamanhoValido =
+            !tamanhoSelecionado ||
+            produto.tamanho?.some(
+                (tamanho) => tamanho.nome === tamanhoSelecionado
+            );
+
+        const promocaoValida =
+            !somentePromocoes ||
+            (produto.em_promocao &&
+                produto.preco_promocional &&
+                Number(produto.preco_promocional) < Number(produto.preco));
+
+        return (
+            buscaValida &&
+            categoriaValida &&
+            precoMinimoValido &&
+            precoMaximoValido &&
+            tamanhoValido &&
+            promocaoValida
         );
+    });
 
     return (
         <>
@@ -236,10 +164,7 @@ function Produtos() {
 
             <main className="catalog-page">
                 <section className="catalog-header">
-                    <h1>
-                        Nossos Produtos
-                    </h1>
-
+                    <h1>Nossos Produtos</h1>
                     <p>
                         Encontre roupas confortáveis e especiais para os pequenos.
                     </p>
@@ -249,190 +174,104 @@ function Produtos() {
                     <div className="catalog-top">
                         <div>
                             <h2>
-                                {
-                                    busca
-                                        ? `Resultados para "${busca}"`
-                                        : categoriaSelecionada
-                                            ? categoriaSelecionada
-                                            : "Todos os produtos"
-                                }
+                                {busca
+                                    ? `Resultados para "${busca}"`
+                                    : categoriaSelecionada
+                                    ? categoriaSelecionada
+                                    : "Todos os produtos"}
                             </h2>
-
-                            <span>
-                                {
-                                    produtosFiltrados.length
-                                }{" "}
-                                produtos encontrados
-                            </span>
+                            <span>{produtosFiltrados.length} produtos encontrados</span>
                         </div>
 
                         <button
                             type="button"
                             className="open-filter-button"
-                            onClick={() =>
-                                setFiltrosAbertos(
-                                    (estadoAtual) =>
-                                        !estadoAtual
-                                )
-                            }
+                            onClick={() => setFiltrosAbertos((estadoAtual) => !estadoAtual)}
                         >
                             <FaFilter />
-                                Filtros
+                            Filtros
                         </button>
                     </div>
 
                     {filtrosAbertos && (
                         <aside className="filters-panel">
                             <div className="filters-header">
-                                <h3>
-                                    Filtrar produtos
-                                </h3>
-
+                                <h3>Filtrar produtos</h3>
                                 <button
                                     type="button"
                                     className="close-filter-button"
-                                    onClick={() =>
-                                        setFiltrosAbertos(
-                                            false
-                                        )
-                                    }
+                                    onClick={() => setFiltrosAbertos(false)}
                                 >
                                     <FaTimes />
                                 </button>
                             </div>
 
                             <div className="filter-group">
-                                <label>
-                                    Categoria
-                                </label>
-
+                                <label>Categoria</label>
                                 <select
-                                    value={
-                                        categoriaSelecionada
-                                    }
-                                    onChange={
-                                        alterarCategoriaFiltro
-                                    }
+                                    value={categoriaSelecionada}
+                                    onChange={alterarCategoriaFiltro}
                                 >
-
-                                    <option value="">
-                                        Todas as categorias
-                                    </option>
-
+                                    <option value="">Todas as categorias</option>
                                     {categorias
-                                        .filter(
-                                            (categoria) =>
-                                                categoria !==
-                                                "Todas"
-                                        )
-                                        .map(
-                                            (categoria) => (
-                                                <option
-                                                    key={
-                                                        categoria
-                                                    }
-                                                    value={
-                                                        categoria
-                                                    }
-                                                >
-                                                    {
-                                                        categoria
-                                                    }
-                                                </option>
-
-                                            )
-                                        )}
+                                        .filter((categoria) => categoria !== "Todas")
+                                        .map((categoria) => (
+                                            <option key={categoria} value={categoria}>
+                                                {categoria}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
 
                             <div className="filter-group">
-                                <label>
-                                    Faixa de preço
-                                </label>
-
+                                <label>Faixa de preço</label>
                                 <div className="price-filter">
-
                                     <input
                                         type="number"
                                         min="0"
                                         step="0.01"
                                         placeholder="Preço mínimo"
-                                        value={
-                                            precoMinimo
-                                        }
+                                        value={precoMinimo}
                                         onChange={(event) =>
-                                            setPrecoMinimo(
-                                                event.target.value
-                                            )
+                                            setPrecoMinimo(event.target.value)
                                         }
                                     />
-
                                     <input
                                         type="number"
                                         min="0"
                                         step="0.01"
                                         placeholder="Preço máximo"
-                                        value={
-                                            precoMaximo
-                                        }
+                                        value={precoMaximo}
                                         onChange={(event) =>
-                                            setPrecoMaximo(
-                                                event.target.value
-                                            )
+                                            setPrecoMaximo(event.target.value)
                                         }
                                     />
                                 </div>
                             </div>
 
                             <div className="filter-group">
-                                <label>
-                                    Tamanho
-                                </label>
-
+                                <label>Tamanho</label>
                                 <select
-                                    value={
-                                        tamanhoSelecionado
-                                    }
+                                    value={tamanhoSelecionado}
                                     onChange={(event) =>
-                                        setTamanhoSelecionado(
-                                            event.target.value
-                                        )
+                                        setTamanhoSelecionado(event.target.value)
                                     }
                                 >
-
-                                    <option value="">
-                                        Todos os tamanhos
-                                    </option>
-
-                                    {tamanhos.map(
-                                        (tamanho) => (
-                                            <option
-                                                key={
-                                                    tamanho
-                                                }
-                                                value={
-                                                    tamanho
-                                                }
-                                            >
-                                                {
-                                                    tamanho
-                                                }
-                                            </option>
-                                        )
-                                    )}
+                                    <option value="">Todos os tamanhos</option>
+                                    {tamanhos.map((tamanho) => (
+                                        <option key={tamanho} value={tamanho}>
+                                            {tamanho}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
                             <label className="promotion-filter">
                                 <input
                                     type="checkbox"
-                                    checked={
-                                        somentePromocoes
-                                    }
+                                    checked={somentePromocoes}
                                     onChange={(event) =>
-                                        setSomentePromocoes(
-                                            event.target.checked
-                                        )
+                                        setSomentePromocoes(event.target.checked)
                                     }
                                 />
                                 Mostrar somente produtos em promoção
@@ -441,9 +280,7 @@ function Produtos() {
                             <button
                                 type="button"
                                 className="clear-filters-button"
-                                onClick={
-                                    limparFiltros
-                                }
+                                onClick={limparFiltros}
                             >
                                 Limpar filtros
                             </button>
@@ -451,102 +288,56 @@ function Produtos() {
                     )}
 
                     <div className="category-filter-buttons">
-                        {categorias.map(
-                            (categoria) => (
-                                <button
-                                    type="button"
-                                    key={
-                                        categoria
-                                    }
-                                    className={
-                                        (
-                                            categoria ===
-                                            "Todas" &&
-                                            !categoriaSelecionada
-                                        ) ||
-                                        categoria ===
-                                        categoriaSelecionada
-                                            ? "active"
-                                            : ""
-                                    }
-                                    onClick={() =>
-                                        selecionarCategoria(
-                                            categoria
-                                        )
-                                    }
-                                >
-
-                                    {
-                                        categoria
-                                    }
-                                </button>
-                            )
-                        )}
+                        {categorias.map((categoria) => (
+                            <button
+                                type="button"
+                                key={categoria}
+                                className={
+                                    (categoria === "Todas" && !categoriaSelecionada) ||
+                                    categoria === categoriaSelecionada
+                                        ? "active"
+                                        : ""
+                                }
+                                onClick={() => selecionarCategoria(categoria)}
+                            >
+                                {categoria}
+                            </button>
+                        ))}
                     </div>
 
-                    {
-                        produtosFiltrados.length === 0
-                            ? (
-                                <div className="no-products">
-
-                                    <h2>
-                                        Nenhum produto encontrado
-                                    </h2>
-
-                                    <p>
-                                        Tente alterar os filtros selecionados.
-                                    </p>
-
-                                    <button
-                                        type="button"
-                                        onClick={
-                                            limparFiltros
-                                        }
-                                    >
-                                        Limpar filtros
-                                    </button>
-                                </div>
-                            )
-                            : (
-                                <div className="catalog-grid">
-                                    {
-                                        produtosFiltrados.map(
-                                            (produto) => (
-                                                <ProductCard
-                                                    key={
-                                                        produto.id
-                                                    }
-                                                    id={
-                                                        produto.id
-                                                    }
-                                                    nome={
-                                                        produto.nome
-                                                    }
-                                                    preco={
-                                                        produto.preco
-                                                    }
-                                                    emPromocao={
-                                                        produto.emPromocao
-                                                    }
-                                                    precoPromocional={
-                                                        produto.precoPromocional
-                                                    }
-                                                    imagem={
-                                                        produto.imagens?.[0] ||
-                                                        produto.imagem
-                                                    }
-                                                />
-                                            )
-                                        )
-                                    }
-                                </div>
-                            )
-                    }
+                    {produtosFiltrados.length === 0 ? (
+                        <div className="no-products">
+                            <h2>Nenhum produto encontrado</h2>
+                            <p>Tente alterar os filtros selecionados.</p>
+                            <button type="button" onClick={limparFiltros}>
+                                Limpar filtros
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="catalog-grid">
+                            {produtosFiltrados.map((produto) => {
+                                const imageUrl = getImageUrl(produto.imagens?.[0]?.imagem);
+                                
+                                return (
+                                    <ProductCard
+                                        key={produto.id}
+                                        id={produto.id}
+                                        nome={produto.nome}
+                                        preco={produto.preco}
+                                        emPromocao={produto.em_promocao}
+                                        precoPromocional={produto.preco_promocional}
+                                        imagem={imageUrl}
+                                        categoria={produto.categoria?.nome}
+                                        cores={produto.cores}
+                                    />
+                                );
+                            })}
+                        </div>
+                    )}
                 </section>
             </main>
 
             <Footer />
-
         </>
     );
 }

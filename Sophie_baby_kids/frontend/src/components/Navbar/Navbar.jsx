@@ -6,7 +6,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useCart } from "../../context/CartContext/CartContext";
-import { useAuth } from "../../context/AuthContext/AuthContext";
 
 import { TfiMenu } from "react-icons/tfi";
 import {
@@ -21,9 +20,12 @@ function Navbar() {
     const [usuarioMenuAberto, setUsuarioMenuAberto] = useState(false);
 
     const { cartItems } = useCart();
-    const { usuario, logout } = useAuth();
 
     const navigate = useNavigate();
+
+    // ✅ Verifica se o admin está logado
+    const adminLogado = localStorage.getItem("admin_logado") === "true";
+    const adminEmail = localStorage.getItem("admin_email") || "Admin";
 
     const totalItems = cartItems.reduce(
         (total, item) => total + item.quantidade,
@@ -31,8 +33,10 @@ function Navbar() {
     );
 
     function sair() {
-        logout();
-
+        localStorage.removeItem("admin_logado");
+        localStorage.removeItem("admin_email");
+        localStorage.removeItem("admin_nome");
+        
         setUsuarioMenuAberto(false);
         setMenuAberto(false);
 
@@ -83,7 +87,7 @@ function Navbar() {
 
                     <div className="user-area">
 
-                        {usuario ? (
+                        {adminLogado ? (
                             <button
                                 className="user-button"
                                 onClick={() =>
@@ -113,19 +117,12 @@ function Navbar() {
                             </Link>
                         )}
 
-                        {usuario && usuarioMenuAberto && (
+                        {adminLogado && usuarioMenuAberto && (
                             <div className="user-dropdown">
-
-                                <p>
-                                    {usuario.email}
-                                </p>
-
-                                <button
-                                    onClick={sair}
-                                >
+                                <p>{adminEmail}</p>
+                                <button onClick={sair}>
                                     Sair
                                 </button>
-
                             </div>
                         )}
 
@@ -187,7 +184,7 @@ function Navbar() {
                         Contato
                     </Link>
 
-                    {usuario?.tipo === "admin" && (
+                    {adminLogado && (
                         <>
                             <div className="menu-divider" />
 

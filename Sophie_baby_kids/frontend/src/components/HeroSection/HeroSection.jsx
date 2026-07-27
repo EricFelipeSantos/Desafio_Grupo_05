@@ -8,11 +8,11 @@ function HeroSection() {
     return (
         <section
             className="hero"
-            style={{
-                backgroundImage: `url(${banner})`
-            }}
+            style={{backgroundImage: `url(${banner})`}}
         >
-            <SearchBar />
+            <div className="hero-search-wrapper">
+                <SearchBar />
+            </div>
         </section>
     );
 }
