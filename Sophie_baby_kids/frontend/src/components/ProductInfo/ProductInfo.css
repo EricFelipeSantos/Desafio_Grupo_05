@@ -97,8 +97,18 @@
     margin: 0;
     color: var(--primary-pink);
     font-family: "Poppins", sans-serif;
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 700;
+}
+
+/* última tentativa de pelo menos deixar destacado o preço*/
+.product-details-content .product-price,
+.product-info .product-price {
+    margin: 0 !important;
+    color: var(--primary-pink) !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 40px !important;
+    font-weight: 700 !important;
 }
 
 .product-detail-promotion {
@@ -110,14 +120,14 @@
 
 .product-detail-promotion .product-price {
     margin: 0;
-    font-size: 40px !important;
+    font-size: 40px;
     font-weight: 700;
     color: var(--primary-pink);
 }
 
 .product-detail-promotion .product-original-price {
     color: #999;
-    font-size: 20px;
+    font-size: 22px;
     text-decoration: line-through;
     font-weight: 400;
 }

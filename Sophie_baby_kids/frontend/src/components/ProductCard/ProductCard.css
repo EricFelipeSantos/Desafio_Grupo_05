@@ -21,8 +21,6 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.13);
 }
 
-/* IMAGEM DO PRODUTO */
-
 .product-image-container {
     position: relative;
     width: 100%;
@@ -42,8 +40,6 @@
     transform: scale(1.05);
 }
 
-/* ETIQUETA DE PROMOÇÃO */
-
 .promotion-badge {
     position: absolute;
     top: 14px;
@@ -59,16 +55,12 @@
     letter-spacing: 0.3px;
 }
 
-/* INFORMAÇÕES DO PRODUTO */
-
 .product-card-info {
     display: flex;
     flex-direction: column;
     min-height: 180px;
     padding: 18px;
 }
-
-/* NOME */
 
 .product-card-info h3 {
     min-height: 48px;
@@ -81,39 +73,37 @@
     line-height: 1.4;
 }
 
-/* PREÇO NORMAL */
-
 .price {
     margin: 0 0 16px;
     color: var(--primary-blue);
     font-family: "Poppins", sans-serif;
-    font-size: 21px;
+    font-size: 22px;
     font-weight: 700;
+    line-height: 1.2;
 }
-
-/* PREÇOS DE PROMOÇÃO */
 
 .promotion-prices {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    justify-content: flex-end;
+    gap: 2px;
     margin-bottom: 16px;
 }
 
 .original-price {
     color: #999999;
-    font-size: 14px;
+    font-size: 13px;
     text-decoration: line-through;
+    line-height: 1;
 }
 
 .promotion-price {
     color: var(--primary-pink);
     font-family: "Poppins", sans-serif;
-    font-size: 21px;
+    font-size: 22px;
     font-weight: 700;
+    line-height: 1.2;
 }
-
-/* BOTÃO VER PRODUTO */
 
 .details-button {
     display: flex;
@@ -137,8 +127,6 @@
     background: var(--primary-blue);
 }
 
-/* TABLET */
-
 @media (max-width: 1024px) {
 
     .product-image-container {
@@ -146,8 +134,6 @@
     }
 
 }
-
-/* CELULAR */
 
 @media (max-width: 768px) {
 
@@ -169,8 +155,6 @@
     }
 
 }
-
-/* CELULAR PEQUENO */
 
 @media (max-width: 480px) {
 

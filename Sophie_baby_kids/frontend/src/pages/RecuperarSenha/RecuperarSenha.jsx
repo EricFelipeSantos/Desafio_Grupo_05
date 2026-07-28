@@ -24,8 +24,7 @@ function RecuperarSenha() {
         setTimeout(() => {
             if (email === ADMIN_EMAIL) {
                 setEnviado(true);
-                // Aqui você pode adicionar lógica para enviar email
-                // Por enquanto, apenas simula o envio
+                // pendente, vou colocar ainda
             } else {
                 setErro("E-mail não encontrado. Use o e-mail administrativo.");
             }
@@ -46,7 +45,7 @@ function RecuperarSenha() {
 
                     {enviado ? (
                         <div className="recuperar-sucesso">
-                            <p>✅ Um e-mail foi enviado para <strong>{email}</strong> com as instruções para recuperar sua senha.</p>
+                            <p>Um e-mail foi enviado para <strong>{email}</strong> com as instruções para recuperar sua senha.</p>
                             <Link to="/login" className="back-to-login">
                                 <FaArrowLeft /> Voltar para o login
                             </Link>

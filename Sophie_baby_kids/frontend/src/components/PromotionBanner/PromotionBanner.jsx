@@ -22,7 +22,7 @@ function PromotionBanner() {
                 setBannerAtual((atual) =>
                     atual === banners.length - 1 ? 0 : atual + 1
                 );
-            }, 5000);
+            }, 5000); // intervalo de 5 segundos para cada banner
             return () => clearInterval(interval);
         }
     }, [banners]);

@@ -182,35 +182,39 @@ function EditarProduto() {
     async function handleSubmit(event) {
         event.preventDefault();
 
+        console.log("imagensExistentes:", imagensExistentes);
+        console.log("novasImagens:", novasImagens);
+        console.log("imagensParaRemover:", imagensParaRemover);
+
         if (nome.trim() === "") {
             alert("Informe o nome do produto.");
             return;
         }
 
         if (preco === "" || Number(preco) <= 0) {
-            alert("O preço deve ser maior que zero.");
+            alert("O preco deve ser maior que zero.");
             return;
         }
 
         if (emPromocao) {
             if (precoPromocional === "" || Number(precoPromocional) <= 0) {
-                alert("Informe um preço promocional válido.");
+                alert("Informe um preco promocional valido.");
                 return;
             }
 
             if (Number(precoPromocional) >= Number(preco)) {
-                alert("O preço promocional deve ser menor que o preço original.");
+                alert("O preco promocional deve ser menor que o preco original.");
                 return;
             }
         }
 
         if (categoria === "") {
-            alert("Selecione o tipo de peça.");
+            alert("Selecione o tipo de peca.");
             return;
         }
 
         if (publico === "") {
-            alert("Selecione o público do produto.");
+            alert("Selecione o publico do produto.");
             return;
         }
 
@@ -225,7 +229,7 @@ function EditarProduto() {
         }
 
         if (faixaEtaria.trim() === "") {
-            alert("Informe a faixa etária.");
+            alert("Informe a faixa etaria.");
             return;
         }
 
@@ -235,7 +239,7 @@ function EditarProduto() {
         }
 
         if (descricao.trim() === "") {
-            alert("Informe a descrição do produto.");
+            alert("Informe a descricao do produto.");
             return;
         }
 
@@ -274,7 +278,10 @@ function EditarProduto() {
         }
 
         if (imagensParaRemover.length > 0) {
+            console.log("Enviando imagens_remover:", JSON.stringify(imagensParaRemover));
             produtoAtualizado.append("imagens_remover", JSON.stringify(imagensParaRemover));
+        } else {
+            console.log("Nenhuma imagem para remover");
         }
 
         try {
@@ -283,7 +290,7 @@ function EditarProduto() {
             navigate("/gerenciar-produtos");
         } catch (erro) {
             console.error("Erro ao atualizar produto:", erro);
-            alert("Não foi possível atualizar o produto.");
+            alert("Nao foi possivel atualizar o produto.");
         }
     }
 
@@ -309,7 +316,7 @@ function EditarProduto() {
                 <Navbar />
                 <main className="editar-page">
                     <div className="editar-container">
-                        <h1>Produto não encontrado.</h1>
+                        <h1>Produto nao encontrado.</h1>
                     </div>
                 </main>
                 <Footer />
@@ -325,7 +332,7 @@ function EditarProduto() {
                 <section className="editar-container">
                     <div className="editar-header">
                         <h1>Editar Produto</h1>
-                        <p>Atualize as informações do produto.</p>
+                        <p>Atualize as informacoes do produto.</p>
                     </div>
 
                     <form className="editar-form" onSubmit={handleSubmit}>
@@ -341,7 +348,7 @@ function EditarProduto() {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Preço original</label>
+                                <label>Preco original</label>
                                 <input
                                     type="number"
                                     min="0.01"
@@ -353,33 +360,33 @@ function EditarProduto() {
                             </div>
 
                             <div className="form-group">
-                                <label>Tipo de peça</label>
+                                <label>Tipo de peca</label>
                                 <select
                                     value={categoria}
                                     onChange={(event) => setCategoria(event.target.value)}
                                 >
-                                    <option value="">Selecione o tipo de peça</option>
+                                    <option value="">Selecione o tipo de peca</option>
                                     <option value="3">Vestidos</option>
                                     <option value="4">Conjuntos</option>
                                     <option value="5">Blusas</option>
-                                    <option value="6">Calças</option>
+                                    <option value="6">Calcas</option>
                                     <option value="7">Shorts</option>
-                                    <option value="8">Macacões</option>
-                                    <option value="9">Outras peças</option>
+                                    <option value="8">Macacoes</option>
+                                    <option value="9">Outras pecas</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <label>Público</label>
+                            <label>Publico</label>
                             <select
                                 value={publico}
                                 onChange={(event) => setPublico(event.target.value)}
                             >
-                                <option value="">Selecione o público</option>
+                                <option value="">Selecione o publico</option>
                                 <option value="F">Meninas</option>
                                 <option value="M">Meninos</option>
-                                <option value="B">Bebês</option>
+                                <option value="B">Bebes</option>
                                 <option value="U">Unissex</option>
                             </select>
                         </div>
@@ -391,12 +398,12 @@ function EditarProduto() {
                                     checked={emPromocao}
                                     onChange={(event) => setEmPromocao(event.target.checked)}
                                 />
-                                <span>Produto em promoção</span>
+                                <span>Produto em promocao</span>
                             </label>
 
                             {emPromocao && (
                                 <div className="promotion-price">
-                                    <label>Preço promocional</label>
+                                    <label>Preco promocional</label>
                                     <input
                                         type="number"
                                         min="0.01"
@@ -406,14 +413,14 @@ function EditarProduto() {
                                         onChange={(event) => setPrecoPromocional(event.target.value)}
                                     />
                                     <small>
-                                        O preço original aparecerá riscado e o preço promocional ficará em destaque.
+                                        O preco original aparecera riscado e o preco promocional ficara em destaque.
                                     </small>
                                 </div>
                             )}
                         </div>
 
                         <div className="form-group">
-                            <label>Tamanhos disponíveis</label>
+                            <label>Tamanhos disponiveis</label>
                             <div className="checkbox-group">
                                 {[
                                     { id: 1, nome: "RN" },
@@ -445,7 +452,7 @@ function EditarProduto() {
                         </div>
 
                         <div className="form-group">
-                            <label>Cores disponíveis</label>
+                            <label>Cores disponiveis</label>
                             <div className="color-form">
                                 <input
                                     type="text"
@@ -485,7 +492,7 @@ function EditarProduto() {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Faixa etária</label>
+                                <label>Faixa etaria</label>
                                 <input
                                     type="text"
                                     placeholder="Ex: 2 a 6 anos"
@@ -498,7 +505,7 @@ function EditarProduto() {
                                 <label>Material</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: 100% Algodão"
+                                    placeholder="Ex: 100% Algodao"
                                     value={material}
                                     onChange={(event) => setMaterial(event.target.value)}
                                 />
@@ -506,7 +513,7 @@ function EditarProduto() {
                         </div>
 
                         <div className="form-group">
-                            <label>Descrição</label>
+                            <label>Descricao</label>
                             <textarea
                                 rows="5"
                                 placeholder="Descreva o produto..."
@@ -518,7 +525,7 @@ function EditarProduto() {
                         <div className="form-group">
                             <label>Imagens do produto</label>
                             <small>
-                                Você pode manter as imagens atuais e adicionar novas imagens.
+                                Voce pode manter as imagens atuais e adicionar novas imagens.
                             </small>
 
                             <input
@@ -585,7 +592,7 @@ function EditarProduto() {
                             </button>
 
                             <button type="submit" className="save-edit-button">
-                                Salvar alterações
+                                Salvar alteracoes
                             </button>
                         </div>
                     </form>

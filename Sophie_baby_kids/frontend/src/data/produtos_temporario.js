@@ -3,6 +3,8 @@ import conjunto from "../assets/products/conjunto.png";
 import macacao from "../assets/products/macacao.jpg";
 import vestidoAzul from "../assets/products/vestido-azul.jpg";
 
+// arquivo usado para testes iniciais
+
 const produtos_temporario = [
     {
         id: 1,

@@ -23,7 +23,6 @@ function Navbar() {
 
     const navigate = useNavigate();
 
-    // ✅ Verifica se o admin está logado
     const adminLogado = localStorage.getItem("admin_logado") === "true";
     const adminEmail = localStorage.getItem("admin_email") || "Admin";
 
