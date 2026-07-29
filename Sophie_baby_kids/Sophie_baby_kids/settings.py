@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-ej&77-97h=$)fi4t(c!5kb6wqq&+%^r+5d05n*i62g==c7ai2e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'sophie-baby-kids.onrender.com', # adicionando o domínio do Render
+]
 
 
 # Application definition
