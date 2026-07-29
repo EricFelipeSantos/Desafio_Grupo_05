@@ -1,0 +1,1 @@
+web: gunicorn Sophie_baby_kids.wsgi:application

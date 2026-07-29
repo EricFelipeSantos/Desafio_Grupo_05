@@ -1,0 +1,554 @@
+.navbar {
+    width: 100%;
+    padding: 18px clamp(20px, 5vw, 80px);
+    background: white;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1400px;
+    min-height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.navbar-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover {
+    transform: translateX(-50%) scale(1.02);
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+    display: block;
+    transition: height 0.3s ease;
+}
+
+.navbar.scrolled .logo {
+    height: 60px;
+}
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    background: rgba(50, 160, 185, 0.08);
+}
+
+.menu-button:active {
+    transform: scale(0.9);
+}
+
+.menu-icon {
+    font-size: 28px;
+    color: var(--primary-blue);
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover .menu-icon {
+    color: var(--primary-pink);
+}
+
+.navbar-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: var(--primary-blue);
+    font-size: 26px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.cart-icon:hover {
+    color: var(--primary-pink);
+    background: rgba(255, 151, 192, 0.08);
+}
+
+.cart-icon:active {
+    transform: scale(0.9);
+}
+
+.cart-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: var(--primary-pink);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.user-area {
+    position: relative;
+}
+
+.user-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    color: var(--primary-blue);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.user-button:hover {
+    color: var(--primary-pink);
+    background: rgba(255, 151, 192, 0.08);
+}
+
+.user-button:active {
+    transform: scale(0.9);
+}
+
+.user-icon {
+    font-size: 26px;
+    transition: all 0.3s ease;
+}
+
+.user-button:hover .user-icon {
+    transform: scale(1.1);
+}
+
+.user-arrow {
+    font-size: 12px;
+    transition: all 0.3s ease;
+    color: #999;
+}
+
+.user-arrow.open {
+    transform: rotate(180deg);
+    color: var(--primary-pink);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    min-width: 220px;
+    padding: 18px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    animation: slideDown 0.3s ease;
+    border: 1px solid #f0f2f5;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-dropdown p {
+    margin: 0 0 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f2f5;
+    color: #555;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.user-dropdown button {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #555;
+    text-align: left;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-dropdown button:hover {
+    background: #fee;
+    color: var(--primary-pink);
+}
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 340px;
+    height: 100vh;
+    padding: 30px 25px;
+    background: white;
+    border-radius: 0 24px 24px 0;
+    box-shadow: 5px 0 40px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+}
+
+.dropdown-menu.open {
+    transform: translateX(0);
+}
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: #f0f2f5;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: #d0d5db;
+    border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
+.menu-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.menu-header h3 {
+    margin: 0;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.close-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--primary-blue);
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-menu-button:hover {
+    color: white;
+    background: var(--primary-pink);
+    transform: rotate(90deg);
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+    color: #555;
+    border-radius: 10px;
+    border-bottom: 1px solid #f5f6f8;
+    font-family: "Lato", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    color: var(--primary-pink);
+    padding-left: 18px;
+    background: rgba(255, 151, 192, 0.06);
+}
+
+.dropdown-menu a:active {
+    transform: scale(0.98);
+}
+
+.menu-divider {
+    width: 100%;
+    height: 1px;
+    margin: 20px 0;
+    background: linear-gradient(to right, transparent, #e8ecf0, transparent);
+}
+
+.admin-title {
+    margin: 0 0 12px;
+    padding: 0 10px;
+    color: var(--primary-blue);
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.dropdown-menu a.admin-link {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.dropdown-menu a.admin-link:hover {
+    color: var(--primary-pink);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 14px 20px;
+    }
+
+    .navbar-container {
+        min-height: 60px;
+    }
+
+    .logo {
+        height: 55px;
+    }
+
+    .navbar.scrolled .logo {
+        height: 45px;
+    }
+
+    .menu-icon,
+    .user-icon {
+        font-size: 24px;
+    }
+
+    .cart-icon {
+        font-size: 22px;
+    }
+
+    .navbar-actions {
+        gap: 15px;
+    }
+
+    .dropdown-menu {
+        width: 85%;
+        max-width: 320px;
+        padding: 25px 20px;
+        border-radius: 0 18px 18px 0;
+    }
+
+    .dropdown-menu a {
+        font-size: 15px;
+        padding: 11px 10px;
+    }
+
+    .menu-header h3 {
+        font-size: 20px;
+    }
+
+    .user-dropdown {
+        min-width: 180px;
+        padding: 15px;
+        right: -10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 14px;
+    }
+
+    .navbar-container {
+        min-height: 50px;
+    }
+
+    .logo {
+        height: 42px;
+    }
+
+    .navbar.scrolled .logo {
+        height: 36px;
+    }
+
+    .menu-icon {
+        font-size: 22px;
+    }
+
+    .user-icon {
+        font-size: 20px;
+    }
+
+    .cart-icon {
+        font-size: 20px;
+    }
+
+    .navbar-actions {
+        gap: 10px;
+    }
+
+    .cart-count {
+        min-width: 18px;
+        height: 18px;
+        font-size: 9px;
+        padding: 0 4px;
+        top: -4px;
+        right: -4px;
+    }
+
+    .dropdown-menu {
+        width: 88%;
+        padding: 20px 16px;
+    }
+
+    .dropdown-menu a {
+        font-size: 14px;
+        padding: 10px 8px;
+    }
+
+    .menu-header h3 {
+        font-size: 18px;
+    }
+
+    .menu-header {
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+    }
+
+    .close-menu-button {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    .user-dropdown {
+        min-width: 160px;
+        padding: 12px;
+        right: -15px;
+        top: 45px;
+    }
+
+    .user-dropdown p {
+        font-size: 13px;
+    }
+
+    .user-dropdown button {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .admin-title {
+        font-size: 14px;
+    }
+
+    .menu-divider {
+        margin: 15px 0;
+    }
+}
+
+.navbar ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.navbar ::-webkit-scrollbar-track {
+    background: #f0f2f5;
+}
+
+.navbar ::-webkit-scrollbar-thumb {
+    background: #d0d5db;
+    border-radius: 10px;
+}
+
+.navbar ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}

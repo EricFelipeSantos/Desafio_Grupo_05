@@ -1,0 +1,114 @@
+.category-section {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.category-section h2 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+    color: var(--text-dark);
+    font-family: "Poppins", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.category-section h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(
+        to right,
+        var(--primary-pink),
+        var(--primary-yellow)
+    );
+    border-radius: 10px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.categorie-list {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.categorie-list::-webkit-scrollbar {
+    display: none;
+}
+
+.categorie-list button {
+    flex-shrink: 0;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 25px;
+    background: #ffe5f1;
+    color: #353535;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.categorie-list button:hover {
+    background: var(--primary-yellow);
+    transform: translateY(-2px);
+}
+
+.categorie-list button.active {
+    background: var(--primary-pink);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 151, 192, 0.3);
+}
+
+.filter-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 30px;
+    background: var(--primary-blue);
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.filter-button:hover {
+    background: var(--primary-yellow);
+    color: #353535;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .category-section {
+        width: 90%;
+    }
+
+    .category-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .filter-button {
+        width: 100%;
+    }
+
+}

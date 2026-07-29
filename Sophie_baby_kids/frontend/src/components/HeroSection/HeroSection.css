@@ -1,0 +1,38 @@
+.hero {
+    width: 100%;
+    min-height: 420px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.hero-search-wrapper {
+    width: 90%;
+    max-width: 650px;
+    padding: 0 10px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 320px;
+    }
+
+    .hero-search-wrapper {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 230px;
+    }
+
+    .hero-search-wrapper {
+        width: 98%;
+        padding: 0 5px;
+    }
+}
