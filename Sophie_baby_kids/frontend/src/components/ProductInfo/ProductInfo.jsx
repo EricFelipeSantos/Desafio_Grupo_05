@@ -3,7 +3,7 @@ import "../ProductInfo/ProductInfo.css";
 import { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext/CartContext";
 import { FaWhatsapp } from "react-icons/fa";
-import formatPrice from "../../utils/formatPrice";
+import formatPrice from "../../utils/FormatPrice";
 import { useProducts } from "../../context/ProductContext/ProductContext";
 
 function ProductInfo({
