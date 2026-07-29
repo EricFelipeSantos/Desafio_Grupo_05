@@ -8,6 +8,8 @@ import Footer from "../../components/Footer/Footer";
 
 import { FaUserLock, FaEnvelope, FaLock } from "react-icons/fa";
 
+const API_URL = "http://127.0.0.1:8000/api/auth/login/";
+
 function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
@@ -16,9 +18,6 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const ADMIN_EMAIL = "admin@sophiebabykids.com";
-    const ADMIN_SENHA = "123456";
-
     useEffect(() => {
         const adminLogado = localStorage.getItem("admin_logado") === "true";
         if (adminLogado) {
@@ -26,19 +25,40 @@ function Login() {
         }
     }, []);
 
-    function fazerLogin(event) {
+    async function fazerLogin(event) {
         event.preventDefault();
         setErro("");
         setLoading(true);
 
-        // Verificar credenciais
-        if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
-            localStorage.setItem("admin_logado", "true");
-            localStorage.setItem("admin_email", email);
-            localStorage.setItem("admin_nome", "Administrador");
-            navigate("/dashboard");
-        } else {
-            setErro("E-mail ou senha inválidos. Tente novamente.");
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: senha
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.setItem("access_token", data.data.access_token);
+                localStorage.setItem("refresh_token", data.data.refresh_token);
+                localStorage.setItem("admin_logado", "true");
+                localStorage.setItem("admin_email", data.data.user.email);
+                localStorage.setItem("admin_nome", data.data.user.first_name || "Administrador");
+
+                navigate("/dashboard");
+            } else {
+                setErro(data.errors?.detail || "E-mail ou senha inválidos.");
+            }
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+            setErro("Erro ao conectar com o servidor. Verifique se o backend está rodando.");
+        } finally {
             setLoading(false);
         }
     }
@@ -71,12 +91,12 @@ function Login() {
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="admin@sophiebabykids.com"
+                                placeholder="Digite seu e-mail"
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
                                 required
                                 disabled={loading}
-                                autoComplete="username"
+                                autoComplete="email"
                             />
                         </div>
 
@@ -111,12 +131,6 @@ function Login() {
                             )}
                         </button>
                     </form>
-
-                    <div className="login-info">
-                        <p className="credentials-label">🔐 Credenciais de acesso:</p>
-                        <p className="credentials">admin@sophiebabykids.com</p>
-                        <p className="credentials">Senha: 123456</p>
-                    </div>
                 </section>
             </main>
 

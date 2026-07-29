@@ -20,6 +20,22 @@ export function ProductProvider({ children }) {
         return `http://127.0.0.1:8000/media/${imagemPath}`;
     };
 
+    const getToken = () => {
+        return localStorage.getItem("access_token");
+    };
+
+    const getHeaders = (isFormData = false) => {
+        const token = getToken();
+        const headers = {};
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+        if (!isFormData) {
+            headers["Content-Type"] = "application/json";
+        }
+        return headers;
+    };
+
     async function buscarProdutos() {
         try {
             setCarregando(true);
@@ -69,7 +85,8 @@ export function ProductProvider({ children }) {
         try {
             const resposta = await fetch(API_URL, {
                 method: "POST",
-                body: novoProduto
+                body: novoProduto,
+                headers: getHeaders(true)
             });
 
             const textoResposta = await resposta.text();
@@ -99,7 +116,8 @@ export function ProductProvider({ children }) {
         try {
             const resposta = await fetch(`${API_URL}${id}/`, {
                 method: "PUT", 
-                body: produtoAtualizado
+                body: produtoAtualizado,
+                headers: getHeaders(true)
             });
 
             const textoResposta = await resposta.text();
@@ -136,7 +154,8 @@ export function ProductProvider({ children }) {
     async function excluirProduto(id) {
         try {
             const resposta = await fetch(`${API_URL}${id}/`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: getHeaders()
             });
 
             if (!resposta.ok) {
