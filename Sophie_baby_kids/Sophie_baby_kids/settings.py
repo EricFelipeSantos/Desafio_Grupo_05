@@ -155,6 +155,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'https://sophie-baby-kids-3rw7pvidk-mariasaldanhaas-projects.vercel.app',
 ]
 
 # Default primary key field type
