@@ -8,7 +8,8 @@ import Footer from "../../components/Footer/Footer";
 
 import { FaUserLock, FaEnvelope, FaLock } from "react-icons/fa";
 
-const API_URL = "http://127.0.0.1:8000/api/auth/login/";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const API_URL = `${BASE_URL}/api/auth/login/`;
 
 function Login() {
     const [email, setEmail] = useState("");
