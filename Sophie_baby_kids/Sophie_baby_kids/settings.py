@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta # função que permite definir os intervalos de tempo
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +42,9 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'catalogo',
-    'usuarios', 
+    'usuarios',
+    'rest_framework_simplejwt', # adicionei para poder reconhecer os comandos do JWT
+                                # e conseguir gerar os tokens de autenticação 
 ]
 
 MIDDLEWARE = [
@@ -85,7 +88,7 @@ DATABASES = {
         'USER': 'django_user',
         'PASSWORD': 'BabyKids',
         'HOST': 'localhost',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 
@@ -134,7 +137,17 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ), # faz a verificação se o token JWT é válido antes de permitir o acesso
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # token de acesso dura 1 dia (o que usa para acessar a API)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # token de refresh dura 7 dias (o que você usa para gerar um novo token)
+    'ROTATE_REFRESH_TOKENS': False, # não gera novo token a cada uso (se vai gerar um novo token cada vez q vai usar)
+    'BLACKLIST_AFTER_ROTATION': True, # invalida token antigo quando rotacionado (se vai invalidar um token antigo quando gerar um novo)
 }
 
 CORS_ALLOWED_ORIGINS = [
