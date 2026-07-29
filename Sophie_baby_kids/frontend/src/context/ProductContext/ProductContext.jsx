@@ -7,7 +7,7 @@ import {
 
 const ProductContext = createContext();
 
-const API_URL = "http://127.0.0.1:8000/api/produtos/";
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/produtos/";
 
 export function ProductProvider({ children }) {
     const [produtos, setProdutos] = useState([]);
@@ -17,7 +17,8 @@ export function ProductProvider({ children }) {
     const getImageUrl = (imagemPath) => {
         if (!imagemPath) return null;
         if (imagemPath.startsWith('http')) return imagemPath;
-        return `http://127.0.0.1:8000/media/${imagemPath}`;
+        const baseUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+        return `${baseUrl}/media/${imagemPath}`;
     };
 
     const getToken = () => {
