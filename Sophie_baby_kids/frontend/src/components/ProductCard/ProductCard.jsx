@@ -1,6 +1,6 @@
 import "../ProductCard/ProductCard.css";
 import { Link } from "react-router-dom";
-import formatPrice from "../../utils/formatPrice";
+import formatPrice from "../../utils/FormatPrice";
 
 function ProductCard({
     id,

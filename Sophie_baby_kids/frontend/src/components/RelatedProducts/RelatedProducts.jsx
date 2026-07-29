@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useProducts } from "../../context/ProductContext/ProductContext";
 import { useCart } from "../../context/CartContext/CartContext";
 
-import formatPrice from "../../utils/formatPrice";
+import formatPrice from "../../utils/FormatPrice";
 
 import "./RelatedProducts.css";
 
