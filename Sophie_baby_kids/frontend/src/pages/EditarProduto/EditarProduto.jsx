@@ -192,29 +192,29 @@ function EditarProduto() {
         }
 
         if (preco === "" || Number(preco) <= 0) {
-            alert("O preco deve ser maior que zero.");
+            alert("O preço deve ser maior que zero.");
             return;
         }
 
         if (emPromocao) {
             if (precoPromocional === "" || Number(precoPromocional) <= 0) {
-                alert("Informe um preco promocional valido.");
+                alert("Informe um preço promocional válido.");
                 return;
             }
 
             if (Number(precoPromocional) >= Number(preco)) {
-                alert("O preco promocional deve ser menor que o preco original.");
+                alert("O preço promocional deve ser menor que o preço original.");
                 return;
             }
         }
 
         if (categoria === "") {
-            alert("Selecione o tipo de peca.");
+            alert("Selecione o tipo de peça.");
             return;
         }
 
         if (publico === "") {
-            alert("Selecione o publico do produto.");
+            alert("Selecione o público do produto.");
             return;
         }
 
@@ -229,7 +229,7 @@ function EditarProduto() {
         }
 
         if (faixaEtaria.trim() === "") {
-            alert("Informe a faixa etaria.");
+            alert("Informe a faixa etária.");
             return;
         }
 
@@ -239,7 +239,7 @@ function EditarProduto() {
         }
 
         if (descricao.trim() === "") {
-            alert("Informe a descricao do produto.");
+            alert("Informe a descrição do produto.");
             return;
         }
 
@@ -290,7 +290,7 @@ function EditarProduto() {
             navigate("/gerenciar-produtos");
         } catch (erro) {
             console.error("Erro ao atualizar produto:", erro);
-            alert("Nao foi possivel atualizar o produto.");
+            alert("Não foi possível atualizar o produto.");
         }
     }
 
@@ -316,7 +316,7 @@ function EditarProduto() {
                 <Navbar />
                 <main className="editar-page">
                     <div className="editar-container">
-                        <h1>Produto nao encontrado.</h1>
+                        <h1>Produto não encontrado.</h1>
                     </div>
                 </main>
                 <Footer />
@@ -332,7 +332,7 @@ function EditarProduto() {
                 <section className="editar-container">
                     <div className="editar-header">
                         <h1>Editar Produto</h1>
-                        <p>Atualize as informacoes do produto.</p>
+                        <p>Atualize as informações do produto.</p>
                     </div>
 
                     <form className="editar-form" onSubmit={handleSubmit}>
@@ -348,7 +348,7 @@ function EditarProduto() {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Preco original</label>
+                                <label>Preço original</label>
                                 <input
                                     type="number"
                                     min="0.01"
@@ -360,33 +360,33 @@ function EditarProduto() {
                             </div>
 
                             <div className="form-group">
-                                <label>Tipo de peca</label>
+                                <label>Tipo de peça</label>
                                 <select
                                     value={categoria}
                                     onChange={(event) => setCategoria(event.target.value)}
                                 >
-                                    <option value="">Selecione o tipo de peca</option>
+                                    <option value="">Selecione o tipo de peça</option>
                                     <option value="3">Vestidos</option>
                                     <option value="4">Conjuntos</option>
                                     <option value="5">Blusas</option>
-                                    <option value="6">Calcas</option>
+                                    <option value="6">Calças</option>
                                     <option value="7">Shorts</option>
-                                    <option value="8">Macacoes</option>
-                                    <option value="9">Outras pecas</option>
+                                    <option value="8">Macacões</option>
+                                    <option value="9">Outras peças</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <label>Publico</label>
+                            <label>Público</label>
                             <select
                                 value={publico}
                                 onChange={(event) => setPublico(event.target.value)}
                             >
-                                <option value="">Selecione o publico</option>
+                                <option value="">Selecione o público</option>
                                 <option value="F">Meninas</option>
                                 <option value="M">Meninos</option>
-                                <option value="B">Bebes</option>
+                                <option value="B">Bebês</option>
                                 <option value="U">Unissex</option>
                             </select>
                         </div>
@@ -398,12 +398,12 @@ function EditarProduto() {
                                     checked={emPromocao}
                                     onChange={(event) => setEmPromocao(event.target.checked)}
                                 />
-                                <span>Produto em promocao</span>
+                                <span>Produto em promoção</span>
                             </label>
 
                             {emPromocao && (
                                 <div className="promotion-price">
-                                    <label>Preco promocional</label>
+                                    <label>Preço promocional</label>
                                     <input
                                         type="number"
                                         min="0.01"
@@ -413,14 +413,14 @@ function EditarProduto() {
                                         onChange={(event) => setPrecoPromocional(event.target.value)}
                                     />
                                     <small>
-                                        O preco original aparecera riscado e o preco promocional ficara em destaque.
+                                        O preço original aparecerá riscado e o preço promocional ficará em destaque.
                                     </small>
                                 </div>
                             )}
                         </div>
 
                         <div className="form-group">
-                            <label>Tamanhos disponiveis</label>
+                            <label>Tamanhos disponíveis</label>
                             <div className="checkbox-group">
                                 {[
                                     { id: 1, nome: "RN" },
@@ -452,7 +452,7 @@ function EditarProduto() {
                         </div>
 
                         <div className="form-group">
-                            <label>Cores disponiveis</label>
+                            <label>Cores disponíveis</label>
                             <div className="color-form">
                                 <input
                                     type="text"
@@ -492,7 +492,7 @@ function EditarProduto() {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Faixa etaria</label>
+                                <label>Faixa etária</label>
                                 <input
                                     type="text"
                                     placeholder="Ex: 2 a 6 anos"
@@ -505,7 +505,7 @@ function EditarProduto() {
                                 <label>Material</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: 100% Algodao"
+                                    placeholder="Ex: 100% Algodão"
                                     value={material}
                                     onChange={(event) => setMaterial(event.target.value)}
                                 />
@@ -513,7 +513,7 @@ function EditarProduto() {
                         </div>
 
                         <div className="form-group">
-                            <label>Descricao</label>
+                            <label>Descrição</label>
                             <textarea
                                 rows="5"
                                 placeholder="Descreva o produto..."
@@ -525,7 +525,7 @@ function EditarProduto() {
                         <div className="form-group">
                             <label>Imagens do produto</label>
                             <small>
-                                Voce pode manter as imagens atuais e adicionar novas imagens.
+                                Você pode manter as imagens atuais e adicionar novas imagens.
                             </small>
 
                             <input
@@ -592,7 +592,7 @@ function EditarProduto() {
                             </button>
 
                             <button type="submit" className="save-edit-button">
-                                Salvar alteracoes
+                                Salvar alterações
                             </button>
                         </div>
                     </form>
