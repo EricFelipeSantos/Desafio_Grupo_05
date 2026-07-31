@@ -37,6 +37,64 @@ export function ProductProvider({ children }) {
         return headers;
     };
 
+    // calcula o valor da parcela com ou sem juros
+    const calcularValorParcela = (preco, parcelas, juros) => {
+        if (!preco || !parcelas || parcelas === 0) return 0;
+        const precoBase = Number(preco);
+        const numParcelas = Number(parcelas);
+        const taxaJuros = Number(juros) || 0;
+        
+        if (taxaJuros === 0) {
+            return precoBase / numParcelas;
+        }
+        return (precoBase * (1 + taxaJuros / 100)) / numParcelas;
+    };
+
+    // calcula 5% de desconto para pix
+    const calcularPrecoPix = (preco) => {
+        if (!preco) return 0;
+        return Number(preco) * 0.95;
+    };
+
+    // calcula 5% de desconto para boleto
+    const calcularPrecoBoleto = (preco) => {
+        if (!preco) return 0;
+        return Number(preco) * 0.95;
+    };
+
+    // processa o produto com todas as informações de pagamento
+    const processarProduto = (produto) => {
+        const precoBase = Number(produto.preco);
+        
+        // calcula os precos com base no precoBase
+        const precoPix = produto.preco_pix || calcularPrecoPix(precoBase);
+        const precoBoleto = produto.preco_boleto || calcularPrecoBoleto(precoBase);
+        const parcelas = produto.parcelas || 10;
+        const juros = produto.juros_parcelas || 0;
+        const valorParcela = calcularValorParcela(precoBase, parcelas, juros);
+
+        // gera todas as opcoes de parcelas de 1 ate o maximo
+        const opcoesParcelas = [];
+        for (let i = 1; i <= Number(parcelas); i++) {
+            opcoesParcelas.push({
+                parcelas: i,
+                valor: calcularValorParcela(precoBase, i, juros),
+                total: calcularValorParcela(precoBase, i, juros) * i
+            });
+        }
+
+        return {
+            ...produto,
+            precoBase, // preco que sera usado como base para tudo
+            precoPix: Number(precoPix),
+            precoBoleto: Number(precoBoleto),
+            parcelas: Number(parcelas),
+            jurosParcelas: Number(juros),
+            valorParcela: Number(valorParcela),
+            opcoesParcelas
+        };
+    };
+
     async function buscarProdutos() {
         try {
             setCarregando(true);
@@ -49,13 +107,12 @@ export function ProductProvider({ children }) {
             }
 
             const dados = await resposta.json();
-
-            setProdutos(dados);
+            const produtosProcessados = dados.map(processarProduto);
+            setProdutos(produtosProcessados);
 
         } catch (erro) {
             console.error("Erro ao carregar produtos:", erro);
             setErro("Não foi possível carregar os produtos.");
-
         } finally {
             setCarregando(false);
         }
@@ -74,7 +131,7 @@ export function ProductProvider({ children }) {
             }
 
             const dados = await resposta.json();
-            return dados;
+            return processarProduto(dados);
 
         } catch (erro) {
             console.error("Erro ao buscar produto por ID:", erro);
@@ -93,16 +150,13 @@ export function ProductProvider({ children }) {
             const textoResposta = await resposta.text();
 
             console.log("Status da resposta:", resposta.status);
-            console.log("Resposta da API:", textoResposta);
 
             if (!resposta.ok) {
                 throw new Error(textoResposta || "Erro ao cadastrar produto.");
             }
 
             const dados = JSON.parse(textoResposta);
-
             const produtoCompleto = await buscarProdutoPorId(dados.id);
-
             setProdutos((produtosAtuais) => [...produtosAtuais, produtoCompleto]);
 
             return produtoCompleto;
@@ -131,7 +185,6 @@ export function ProductProvider({ children }) {
             }
 
             const dados = JSON.parse(textoResposta);
-
             const produtoCompleto = await buscarProdutoPorId(dados.id);
 
             setProdutos(
@@ -187,7 +240,11 @@ export function ProductProvider({ children }) {
                 adicionarProduto,
                 editarProduto,
                 excluirProduto,
-                getImageUrl
+                getImageUrl,
+                calcularValorParcela,
+                calcularPrecoPix,
+                calcularPrecoBoleto,
+                processarProduto
             }}
         >
             {children}

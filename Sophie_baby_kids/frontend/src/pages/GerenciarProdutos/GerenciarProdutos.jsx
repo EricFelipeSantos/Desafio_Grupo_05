@@ -11,6 +11,8 @@ import { useCart } from "../../context/CartContext/CartContext";
 
 import { FaEdit, FaTrash, FaPlus, FaBox, FaSearch, FaTimes } from "react-icons/fa";
 
+import { isCorColorido, getCorStyle, getCorClass } from "../../utils/colorUtils";
+
 function GerenciarProdutos() {
     const { produtos, excluirProduto, getImageUrl } = useProducts();
     const { formatPrice } = useCart();
@@ -155,10 +157,18 @@ function GerenciarProdutos() {
                                             ) : (
                                                 <strong className="product-price">{formatPrice(produto.preco)}</strong>
                                             )}
-                                            <div className="product-admin-stats">
-                                                <span>Tamanhos: {produto.tamanho?.length || 0}</span>
-                                                <span>Cores: {produto.cores?.length || 0}</span>
-                                            </div>
+                                             {produto.cores && produto.cores.length > 0 && (
+                                                <div className="product-admin-colors">
+                                                    {produto.cores.map((cor, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className={`color-preview ${getCorClass(cor)}`}
+                                                            style={getCorStyle(cor)}
+                                                            title={cor.nome}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="product-admin-actions">

@@ -40,6 +40,19 @@ function RelatedProducts({ currentProductId }) {
         return null;
     }
 
+    // Função para calcular valor da parcela
+    const calcularValorParcela = (preco, parcelas, juros) => {
+        if (!preco || !parcelas || parcelas === 0) return 0;
+        const precoBase = Number(preco);
+        const numParcelas = Number(parcelas);
+        const taxaJuros = Number(juros) || 0;
+        
+        if (taxaJuros === 0) {
+            return precoBase / numParcelas;
+        }
+        return (precoBase * (1 + taxaJuros / 100)) / numParcelas;
+    };
+
     return (
         <section className="related-products">
             <div className="related-products-header">
@@ -55,6 +68,17 @@ function RelatedProducts({ currentProductId }) {
                         Number(produto.preco_promocional) < Number(produto.preco);
 
                     const imagemUrl = getImageUrl(produto.imagens?.[0]?.imagem);
+                    
+                    const precoBase = estaEmPromocao 
+                        ? Number(produto.preco_promocional) 
+                        : Number(produto.preco);
+                    
+                    const parcelas = Number(produto.parcelas) || 10;
+                    const juros = Number(produto.juros_parcelas) || 0;
+                    const valorParcela = calcularValorParcela(precoBase, parcelas, juros);
+                    const precoPix = produto.preco_pix 
+                        ? Number(produto.preco_pix) 
+                        : precoBase * 0.95;
 
                     return (
                         <Link
@@ -67,6 +91,7 @@ function RelatedProducts({ currentProductId }) {
                                     <img
                                         src={imagemUrl}
                                         alt={produto.nome}
+                                        loading="lazy"
                                     />
                                 ) : (
                                     <div className="related-product-placeholder">
@@ -75,42 +100,23 @@ function RelatedProducts({ currentProductId }) {
                                 )}
 
                                 {estaEmPromocao && (
-                                    <span className="related-promotion-badge">
-                                        OFERTA
+                                    <span className="related-product-badge">
+                                        Oferta
                                     </span>
                                 )}
                             </div>
 
                             <div className="related-product-info">
-                                <span className="related-product-category">
-                                    {produto.categoria?.nome}
-                                </span>
-
-                                <h3>{produto.nome}</h3>
-
-                                {estaEmPromocao ? (
-                                    <div className="related-prices">
-                                        <span className="related-original-price">
-                                            {formatPrice(produto.preco)}
-                                        </span>
-                                        <strong className="related-promotion-price">
-                                            {formatPrice(produto.preco_promocional)}
-                                        </strong>
-                                    </div>
-                                ) : (
-                                    <strong className="related-product-price">
-                                        {formatPrice(produto.preco)}
-                                    </strong>
-                                )}
+                                <h3 className="related-product-name">{produto.nome}</h3>
 
                                 {/* Cores disponíveis */}
                                 {produto.cores && produto.cores.length > 0 && (
-                                    <div className="related-colors">
+                                    <div className="related-product-colors">
                                         {produto.cores.slice(0, 4).map((cor, index) => (
                                             <span
                                                 key={index}
-                                                className="related-color-dot"
-                                                style={{ backgroundColor: cor.codigo }}
+                                                className={`related-color-dot ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                                style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
                                                 title={cor.nome}
                                             />
                                         ))}
@@ -121,6 +127,35 @@ function RelatedProducts({ currentProductId }) {
                                         )}
                                     </div>
                                 )}
+
+                                <div className="related-product-prices">
+                                    {estaEmPromocao ? (
+                                        <>
+                                            <span className="related-original-price">
+                                                {formatPrice(produto.preco)}
+                                            </span>
+                                            <strong className="related-product-price">
+                                                {formatPrice(produto.preco_promocional)}
+                                            </strong>
+                                        </>
+                                    ) : (
+                                        <strong className="related-product-price">
+                                            {formatPrice(produto.preco)}
+                                        </strong>
+                                    )}
+                                </div>
+
+                                <div className="related-product-payment">
+                                    <span className="related-product-pix">
+                                        {formatPrice(precoPix)} no PIX
+                                    </span>
+                                    {parcelas > 1 && (
+                                        <span className="related-product-installment">
+                                            ou {parcelas}x de {formatPrice(valorParcela)}
+                                            {juros > 0 && ` com juros`}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </Link>
                     );

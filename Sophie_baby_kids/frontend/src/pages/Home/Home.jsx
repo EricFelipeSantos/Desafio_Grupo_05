@@ -1,3 +1,5 @@
+// src/pages/Home/Home.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,8 +9,14 @@ import PromotionBanner from "../../components/PromotionBanner/PromotionBanner";
 import CategorySection from "../../components/CategorySection/CategorySection";
 import ProductsSection from "../../components/ProductsSection/ProductsSection";
 import Footer from "../../components/Footer/Footer";
+import WhatsAppButton from "../../components/WhatsAppButton/WhatsAppButton";
 
 import { useProducts } from "../../context/ProductContext/ProductContext";
+
+// IMPORTAR AS CATEGORIAS DO NAVBAR
+import { publicoCategorias } from "../../data/publicoCategoriaData";
+
+import "./Home.css";
 
 function Home() {
     const navigate = useNavigate();
@@ -16,36 +24,23 @@ function Home() {
 
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
 
-    const categoriasDisponiveis = [
-        "Todos",
-        "Promoções",
-        ...new Set(
-            produtos
-                .map(p => p.categoria?.nome)
-                .filter(Boolean)
-        )
-    ];
-
-    useEffect(() => {
-        if (categoriaSelecionada !== "Todos" && 
-            categoriaSelecionada !== "Promoções" &&
-            !categoriasDisponiveis.includes(categoriaSelecionada)) {
-            setCategoriaSelecionada("Todos");
-        }
-    }, [produtos, categoriaSelecionada, categoriasDisponiveis]);
+    // MAPEAMENTO PÚBLICO -> NOME
+    const publicoMap = {
+        'U': 'Primeiros Passos',
+        'F': 'Meninas',
+        'M': 'Meninos',
+        'B': 'Bebês'
+    };
 
     function selecionarCategoria(categoria) {
         setCategoriaSelecionada(categoria);
-    }
-
-    function abrirFiltros() {
-        navigate("/produtos?filtros=true");
     }
 
     function verTodosProdutos() {
         navigate("/produtos");
     }
 
+    // FILTRA PRODUTOS PELA CATEGORIA SELECIONADA
     const produtosFiltrados = produtos.filter((produto) => {
         if (categoriaSelecionada === "Todos") {
             return true;
@@ -59,11 +54,9 @@ function Home() {
             );
         }
 
-        const nomeCategoria = produto.categoria?.nome?.toLowerCase() || "";
-        const publico = produto.publico?.toLowerCase() || "";
-        const filtro = categoriaSelecionada.toLowerCase();
-
-        return nomeCategoria === filtro || publico === filtro;
+        // FILTRA PELO PÚBLICO
+        const nomePublico = publicoMap[produto.publico] || "";
+        return nomePublico === categoriaSelecionada;
     });
 
     if (carregando) {
@@ -82,25 +75,29 @@ function Home() {
         <>
             <Navbar />
 
-            <HeroSection />
+            <main className="home-page">
+                {/* HERO SECTION - OCUPA A MAIOR PARTE DA TELA */}
+                <HeroSection />
 
-            <PromotionBanner />
+                {/* BANNER DE PROMOÇÃO */}
+                <PromotionBanner />
 
-            <CategorySection
-                categoriaSelecionada={categoriaSelecionada}
-                onCategoriaSelecionada={selecionarCategoria}
-                onAbrirFiltros={abrirFiltros}
-                categoriasDisponiveis={categoriasDisponiveis}
-                produtos={produtos}
-            />
+                {/* CATEGORY SECTION COM AS CATEGORIAS DO NAVBAR */}
+                <CategorySection
+                    categoriaSelecionada={categoriaSelecionada}
+                    onCategoriaSelecionada={selecionarCategoria}
+                />
 
-            <ProductsSection
-                produtos={produtosFiltrados}
-                categoriaSelecionada={categoriaSelecionada}
-                onVerTodosProdutos={verTodosProdutos}
-                carregando={carregando}
-            />
+                {/* PRODUTOS */}
+                <ProductsSection
+                    produtos={produtosFiltrados}
+                    categoriaSelecionada={categoriaSelecionada}
+                    onVerTodosProdutos={verTodosProdutos}
+                    carregando={carregando}
+                />
+            </main>
 
+            <WhatsAppButton />
             <Footer />
         </>
     );

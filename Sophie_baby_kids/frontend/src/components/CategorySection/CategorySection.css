@@ -1,47 +1,26 @@
 .category-section {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
-    margin: 40px auto;
+    margin: 0 auto;
+    padding: 30px 20px 10px;
 }
 
-.category-section h2 {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 25px;
-    color: var(--text-dark);
-    font-family: "Poppins", sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.category-section h2::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(
-        to right,
-        var(--primary-pink),
-        var(--primary-yellow)
-    );
-    border-radius: 10px;
-}
-
+/* ===== CATEGORIAS PRINCIPAIS ===== */
 .category-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
 .categorie-list {
     display: flex;
-    flex: 1;
-    gap: 20px;
+    gap: 12px;
     overflow-x: auto;
     scrollbar-width: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 10px;
 }
 
 .categorie-list::-webkit-scrollbar {
@@ -50,65 +29,115 @@
 
 .categorie-list button {
     flex-shrink: 0;
-    padding: 12px 22px;
+    padding: 10px 24px;
     border: none;
     border-radius: 25px;
-    background: #ffe5f1;
-    color: #353535;
+    background: #f0f2f5;
+    color: #555;
     font-family: "Poppins", sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .categorie-list button:hover {
-    background: var(--primary-yellow);
+    background: #e0e4e8;
     transform: translateY(-2px);
 }
 
 .categorie-list button.active {
-    background: var(--primary-pink);
-    color: white;
-    box-shadow: 0 4px 12px rgba(255, 151, 192, 0.3);
-}
-
-.filter-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-shrink: 0;
-    padding: 11px 18px;
-    border: none;
-    border-radius: 30px;
     background: var(--primary-blue);
     color: white;
-    font-family: "Poppins", sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.3s ease;
+    box-shadow: 0 4px 12px rgba(50, 160, 185, 0.3);
 }
 
-.filter-button:hover {
-    background: var(--primary-yellow);
-    color: #353535;
+/* ===== SUB-CATEGORIAS (TIPOS DE PEÇA) ===== */
+.subcategory-section {
+    padding: 10px 10px 0;
+    border-top: 1px solid #f0f2f5;
+    margin-top: 5px;
+}
+
+.subcategory-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+.subcategory-list::-webkit-scrollbar {
+    display: none;
+}
+
+.subcategory-button {
+    flex-shrink: 0;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: #777;
+    font-family: "Lato", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.subcategory-button:hover {
+    background: #f0f2f5;
+    color: var(--primary-blue);
     transform: translateY(-2px);
 }
 
+.subcategory-button:active {
+    transform: scale(0.95);
+}
+
+/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .category-section {
-        width: 90%;
+        padding: 20px 16px 10px;
     }
 
-    .category-header {
-        align-items: stretch;
-        flex-direction: column;
+    .categorie-list {
+        gap: 8px;
+        justify-content: flex-start;
+        padding: 0 5px;
     }
 
-    .filter-button {
-        width: 100%;
+    .categorie-list button {
+        padding: 8px 16px;
+        font-size: 13px;
+        white-space: nowrap;
     }
 
+    .subcategory-list {
+        justify-content: flex-start;
+        padding: 8px 0;
+    }
+
+    .subcategory-button {
+        font-size: 12px;
+        padding: 5px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-section {
+        padding: 15px 12px 10px;
+    }
+
+    .categorie-list button {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    .subcategory-button {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
 }

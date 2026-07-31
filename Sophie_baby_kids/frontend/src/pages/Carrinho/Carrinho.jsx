@@ -10,6 +10,8 @@ import { useProducts } from "../../context/ProductContext/ProductContext";
 
 import { FaTrash, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 
+import { isCorColorido, getCorStyle, getCorClass } from "../../utils/colorUtils";
+
 function Carrinho() {
     const {
         cartItems,
@@ -117,8 +119,8 @@ function Carrinho() {
                                                     <p className="item-detail">
                                                         <strong>Cor:</strong> 
                                                         <span 
-                                                            className="color-dot"
-                                                            style={{ backgroundColor: item.cor.codigo }}
+                                                            className={`color-dot ${getCorClass(item.cor)}`}
+                                                            style={getCorStyle(item.cor)}
                                                         />
                                                         {item.cor.nome}
                                                     </p>

@@ -774,3 +774,12 @@
         font-size: 14px;
     }
 }
+
+.color-dot.colorido {
+    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet) !important;
+    border-color: #dcc8be;
+}
+
+.color-dot.colorido:hover {
+    border-color: #c4907a;
+}

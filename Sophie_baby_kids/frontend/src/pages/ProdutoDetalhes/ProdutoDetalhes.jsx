@@ -55,6 +55,10 @@ function ProdutoDetalhes() {
                         material={product.material}
                         cores={product.cores || []}
                         tamanhos={product.tamanho?.map((tamanho) => tamanho.nome) || []}
+                        precoPix={product.preco_pix}
+                        precoBoleto={product.preco_boleto}
+                        parcelas={product.parcelas}
+                        jurosParcelas={product.juros_parcelas}
                     />
                 </div>
 

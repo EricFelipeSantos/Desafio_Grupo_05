@@ -1,12 +1,9 @@
 import "../CategorySection/CategorySection.css";
-import { FaFilter } from "react-icons/fa";
 
 function CategorySection({
     categoriaSelecionada,
     onCategoriaSelecionada,
-    onAbrirFiltros,
     categoriasDisponiveis = [],
-    produtos = []
 }) {
     const categorias = categoriasDisponiveis.length > 0 
         ? categoriasDisponiveis 
@@ -14,8 +11,6 @@ function CategorySection({
 
     return (
         <section className="category-section">
-            <h2>Categorias</h2>
-
             <div className="category-header">
                 <div className="categorie-list">
                     {categorias.map((categoria) => (
@@ -34,14 +29,6 @@ function CategorySection({
                         </button>
                     ))}
                 </div>
-
-                <button
-                    className="filter-button"
-                    onClick={onAbrirFiltros}
-                >
-                    <FaFilter />
-                    Filtrar
-                </button>
             </div>
         </section>
     );

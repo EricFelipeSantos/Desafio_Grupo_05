@@ -102,6 +102,18 @@ function Produtos() {
         setSearchParams({});
     }
 
+    const calcularValorParcela = (preco, parcelas, juros) => {
+        if (!preco || !parcelas || parcelas === 0) return 0;
+        const precoBaseNum = Number(preco);
+        const numParcelas = Number(parcelas);
+        const taxaJuros = Number(juros) || 0;
+        
+        if (taxaJuros === 0) {
+            return precoBaseNum / numParcelas;
+        }
+        return (precoBaseNum * (1 + taxaJuros / 100)) / numParcelas;
+    };
+
     const produtosFiltrados = produtos.filter((produto) => {
         const precoProduto =
             produto.em_promocao &&
@@ -171,122 +183,7 @@ function Produtos() {
                 </section>
 
                 <section className="catalog-content">
-                    <div className="catalog-top">
-                        <div>
-                            <h2>
-                                {busca
-                                    ? `Resultados para "${busca}"`
-                                    : categoriaSelecionada
-                                    ? categoriaSelecionada
-                                    : "Todos os produtos"}
-                            </h2>
-                            <span>{produtosFiltrados.length} produtos encontrados</span>
-                        </div>
-
-                        <button
-                            type="button"
-                            className="open-filter-button"
-                            onClick={() => setFiltrosAbertos((estadoAtual) => !estadoAtual)}
-                        >
-                            <FaFilter />
-                            Filtros
-                        </button>
-                    </div>
-
-                    {filtrosAbertos && (
-                        <aside className="filters-panel">
-                            <div className="filters-header">
-                                <h3>Filtrar produtos</h3>
-                                <button
-                                    type="button"
-                                    className="close-filter-button"
-                                    onClick={() => setFiltrosAbertos(false)}
-                                >
-                                    <FaTimes />
-                                </button>
-                            </div>
-
-                            <div className="filter-group">
-                                <label>Categoria</label>
-                                <select
-                                    value={categoriaSelecionada}
-                                    onChange={alterarCategoriaFiltro}
-                                >
-                                    <option value="">Todas as categorias</option>
-                                    {categorias
-                                        .filter((categoria) => categoria !== "Todas")
-                                        .map((categoria) => (
-                                            <option key={categoria} value={categoria}>
-                                                {categoria}
-                                            </option>
-                                        ))}
-                                </select>
-                            </div>
-
-                            <div className="filter-group">
-                                <label>Faixa de preço</label>
-                                <div className="price-filter">
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        placeholder="Preço mínimo"
-                                        value={precoMinimo}
-                                        onChange={(event) =>
-                                            setPrecoMinimo(event.target.value)
-                                        }
-                                    />
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        placeholder="Preço máximo"
-                                        value={precoMaximo}
-                                        onChange={(event) =>
-                                            setPrecoMaximo(event.target.value)
-                                        }
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="filter-group">
-                                <label>Tamanho</label>
-                                <select
-                                    value={tamanhoSelecionado}
-                                    onChange={(event) =>
-                                        setTamanhoSelecionado(event.target.value)
-                                    }
-                                >
-                                    <option value="">Todos os tamanhos</option>
-                                    {tamanhos.map((tamanho) => (
-                                        <option key={tamanho} value={tamanho}>
-                                            {tamanho}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <label className="promotion-filter">
-                                <input
-                                    type="checkbox"
-                                    checked={somentePromocoes}
-                                    onChange={(event) =>
-                                        setSomentePromocoes(event.target.checked)
-                                    }
-                                />
-                                Mostrar somente produtos em promoção
-                            </label>
-
-                            <button
-                                type="button"
-                                className="clear-filters-button"
-                                onClick={limparFiltros}
-                            >
-                                Limpar filtros
-                            </button>
-                        </aside>
-                    )}
-
+                    {/* CATEGORIAS EM CIMA */}
                     <div className="category-filter-buttons">
                         {categorias.map((categoria) => (
                             <button
@@ -305,35 +202,169 @@ function Produtos() {
                         ))}
                     </div>
 
-                    {produtosFiltrados.length === 0 ? (
-                        <div className="no-products">
-                            <h2>Nenhum produto encontrado</h2>
-                            <p>Tente alterar os filtros selecionados.</p>
-                            <button type="button" onClick={limparFiltros}>
-                                Limpar filtros
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="catalog-grid">
-                            {produtosFiltrados.map((produto) => {
-                                const imageUrl = getImageUrl(produto.imagens?.[0]?.imagem);
-                                
-                                return (
-                                    <ProductCard
-                                        key={produto.id}
-                                        id={produto.id}
-                                        nome={produto.nome}
-                                        preco={produto.preco}
-                                        emPromocao={produto.em_promocao}
-                                        precoPromocional={produto.preco_promocional}
-                                        imagem={imageUrl}
-                                        categoria={produto.categoria?.nome}
-                                        cores={produto.cores}
+                    <div className="catalog-layout">
+                        {/* FILTROS AO LADO */}
+                        <aside className="filters-sidebar">
+                            <div className="filters-header">
+                                <h3>
+                                    <FaFilter /> Filtrar produtos
+                                </h3>
+                                <button
+                                    type="button"
+                                    className="close-filter-button"
+                                    onClick={() => setFiltrosAbertos(false)}
+                                >
+                                    <FaTimes />
+                                </button>
+                            </div>
+
+                            <div className="filters-body">
+                                <div className="filter-group">
+                                    <label>Categoria</label>
+                                    <select
+                                        value={categoriaSelecionada}
+                                        onChange={alterarCategoriaFiltro}
+                                    >
+                                        <option value="">Todas as categorias</option>
+                                        {categorias
+                                            .filter((categoria) => categoria !== "Todas")
+                                            .map((categoria) => (
+                                                <option key={categoria} value={categoria}>
+                                                    {categoria}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <div className="filter-group">
+                                    <label>Faixa de preço</label>
+                                    <div className="price-filter">
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            step="0.01"
+                                            placeholder="Preço mínimo"
+                                            value={precoMinimo}
+                                            onChange={(event) =>
+                                                setPrecoMinimo(event.target.value)
+                                            }
+                                        />
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            step="0.01"
+                                            placeholder="Preço máximo"
+                                            value={precoMaximo}
+                                            onChange={(event) =>
+                                                setPrecoMaximo(event.target.value)
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="filter-group">
+                                    <label>Tamanho</label>
+                                    <select
+                                        value={tamanhoSelecionado}
+                                        onChange={(event) =>
+                                            setTamanhoSelecionado(event.target.value)
+                                        }
+                                    >
+                                        <option value="">Todos os tamanhos</option>
+                                        {tamanhos.map((tamanho) => (
+                                            <option key={tamanho} value={tamanho}>
+                                                {tamanho}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <label className="promotion-filter">
+                                    <input
+                                        type="checkbox"
+                                        checked={somentePromocoes}
+                                        onChange={(event) =>
+                                            setSomentePromocoes(event.target.checked)
+                                        }
                                     />
-                                );
-                            })}
+                                    Mostrar somente produtos em promoção
+                                </label>
+
+                                <button
+                                    type="button"
+                                    className="clear-filters-button"
+                                    onClick={limparFiltros}
+                                >
+                                    Limpar filtros
+                                </button>
+                            </div>
+                        </aside>
+
+                        {/* LISTA DE PRODUTOS */}
+                        <div className="catalog-products">
+                            <div className="catalog-top">
+                                <div>
+                                    <h2>
+                                        {busca
+                                            ? `Resultados para "${busca}"`
+                                            : categoriaSelecionada
+                                            ? categoriaSelecionada
+                                            : "Todos os produtos"}
+                                    </h2>
+                                    <span>{produtosFiltrados.length} produtos encontrados</span>
+                                </div>
+                            </div>
+
+                            {produtosFiltrados.length === 0 ? (
+                                <div className="no-products">
+                                    <h2>Nenhum produto encontrado</h2>
+                                    <p>Tente alterar os filtros selecionados.</p>
+                                    <button type="button" onClick={limparFiltros}>
+                                        Limpar filtros
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="catalog-grid">
+                                    {produtosFiltrados.map((produto) => {
+                                        const imageUrl = getImageUrl(produto.imagens?.[0]?.imagem);
+                                        
+                                        const estaEmPromocao = produto.em_promocao && 
+                                            produto.preco_promocional && 
+                                            Number(produto.preco_promocional) < Number(produto.preco);
+                                        
+                                        const precoBase = estaEmPromocao 
+                                            ? Number(produto.preco_promocional) 
+                                            : Number(produto.preco);
+                                        
+                                        const parcelas = Number(produto.parcelas) || 10;
+                                        const juros = Number(produto.juros_parcelas) || 0;
+                                        const valorParcela = calcularValorParcela(precoBase, parcelas, juros);
+                                        const precoPix = produto.preco_pix 
+                                            ? Number(produto.preco_pix) 
+                                            : precoBase * 0.95;
+
+                                        return (
+                                            <ProductCard
+                                                key={produto.id}
+                                                id={produto.id}
+                                                nome={produto.nome}
+                                                preco={produto.preco}
+                                                emPromocao={produto.em_promocao}
+                                                precoPromocional={produto.preco_promocional}
+                                                imagem={imageUrl}
+                                                categoria={produto.categoria?.nome}
+                                                cores={produto.cores}
+                                                precoPix={precoPix}
+                                                parcelas={parcelas}
+                                                valorParcela={valorParcela}
+                                                jurosParcelas={juros}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </section>
             </main>
 
