@@ -194,6 +194,28 @@
     max-width: 300px;
 }
 
+/* ESTILO PARA O SMALL DENTRO DE PROMOTION-PRICE - IGUAL AO CADASTRO */
+.promotion-price small {
+    color: #888;
+    font-family: "Lato", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 4px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-pink);
+    display: block;
+    max-width: 300px;
+    transition: all 0.3s ease;
+}
+
+.promotion-price small:hover {
+    background: #f0f2f5;
+    border-left-color: var(--primary-blue);
+}
+
 .checkbox-group {
     display: flex;
     flex-wrap: wrap;
@@ -237,55 +259,53 @@
     accent-color: var(--primary-pink);
 }
 
-.color-form {
+.cores-fixas-grid {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
 }
 
-.color-form input[type="text"] {
-    flex: 1;
-}
-
-.color-form input[type="color"] {
-    width: 54px;
-    height: 48px;
-    padding: 4px;
-    border: 2px solid #e8ecf0;
-    border-radius: 12px;
-    cursor: pointer;
-    background: white;
-    transition: all 0.3s ease;
-}
-
-.color-form input[type="color"]:hover {
-    border-color: var(--primary-pink);
-    transform: scale(1.05);
-}
-
-.add-color-button {
-    height: auto;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 12px;
-    background: var(--primary-pink);
-    color: white;
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+.cor-fixa {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e8ecf0;
+    border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
-    white-space: nowrap;
+    padding: 0;
+    outline: none;
+    flex-shrink: 0;
 }
 
-.add-color-button:hover {
-    background: var(--primary-blue);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(50, 160, 185, 0.25);
+.cor-fixa:hover {
+    transform: scale(1.1);
+    border-color: #b0b8c0;
+    z-index: 1;
 }
 
-.add-color-button:active {
+.cor-fixa.selected {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(50, 160, 185, 0.25);
+    transform: scale(1.08);
+}
+
+.cor-fixa:active {
     transform: scale(0.95);
+}
+
+.cor-fixa.colorido {
+    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet) !important;
+    border-color: #ddd;
+}
+
+.cor-fixa.colorido:hover {
+    border-color: #888;
+}
+
+.cor-fixa.colorido.selected {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(50, 160, 185, 0.25);
 }
 
 .selected-colors {
@@ -537,6 +557,25 @@
     transform: scale(0.95);
 }
 
+.editar-form ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.editar-form ::-webkit-scrollbar-track {
+    background: #f0f2f5;
+    border-radius: 10px;
+}
+
+.editar-form ::-webkit-scrollbar-thumb {
+    background: #d0d5db;
+    border-radius: 10px;
+}
+
+.editar-form ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
 @media (max-width: 768px) {
     .editar-page {
         padding: 40px 15px 60px;
@@ -555,24 +594,6 @@
     .editar-form .form-row {
         grid-template-columns: 1fr;
         gap: 25px;
-    }
-
-    .color-form {
-        flex-wrap: wrap;
-    }
-
-    .color-form input[type="text"] {
-        width: 100%;
-        flex-basis: 100%;
-    }
-
-    .color-form input[type="color"] {
-        flex: 1;
-        height: 48px;
-    }
-
-    .add-color-button {
-        flex: 2;
     }
 
     .image-preview-grid {
@@ -607,6 +628,11 @@
         min-width: 48px;
         padding: 8px 12px;
         font-size: 14px;
+    }
+
+    .cor-fixa {
+        width: 32px;
+        height: 32px;
     }
 }
 
@@ -645,15 +671,6 @@
         font-size: 13px;
     }
 
-    .color-form input[type="color"] {
-        height: 44px;
-    }
-
-    .add-color-button {
-        padding: 12px 20px;
-        font-size: 13px;
-    }
-
     .image-preview-grid {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 10px;
@@ -676,23 +693,24 @@
         width: 18px;
         height: 18px;
     }
-}
 
-.editar-form ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
+    .editar-actions {
+        gap: 10px;
+    }
 
-.editar-form ::-webkit-scrollbar-track {
-    background: #f0f2f5;
-    border-radius: 10px;
-}
+    .cancel-edit-button,
+    .save-edit-button {
+        padding: 14px;
+        font-size: 14px;
+    }
 
-.editar-form ::-webkit-scrollbar-thumb {
-    background: #d0d5db;
-    border-radius: 10px;
-}
+    .cor-fixa {
+        width: 28px;
+        height: 28px;
+        border-width: 2px;
+    }
 
-.editar-form ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-blue);
+    .cores-fixas-grid {
+        gap: 8px;
+    }
 }

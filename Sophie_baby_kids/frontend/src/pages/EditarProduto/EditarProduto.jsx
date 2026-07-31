@@ -8,7 +8,32 @@ import Footer from "../../components/Footer/Footer";
 
 import { IoIosClose } from "react-icons/io";
 
+import formatPrice from "../../utils/FormatPrice";
 import { useProducts } from "../../context/ProductContext/ProductContext";
+
+// lista de cores fixas
+const coresFixas = [
+    { nome: "Branco", codigo: "#FFFFFF" },
+    { nome: "Off White", codigo: "#FAF9F6" },
+    { nome: "Preto", codigo: "#000000" },
+    { nome: "Cinza", codigo: "#808080" },
+    { nome: "Rosa", codigo: "#FFB6C1" },
+    { nome: "Pink", codigo: "#FF69B4" },
+    { nome: "Lilás", codigo: "#C8A2C8" },
+    { nome: "Roxo", codigo: "#800080" },
+    { nome: "Coral", codigo: "#FF7F50" },
+    { nome: "Colorido", codigo: "#FF1493" },
+    { nome: "Azul Marinho", codigo: "#000080" },
+    { nome: "Azul", codigo: "#0000FF" },
+    { nome: "Azul Claro", codigo: "#ADD8E6" },
+    { nome: "Verde", codigo: "#008000" },
+    { nome: "Verde Água", codigo: "#00FFFF" },
+    { nome: "Verde Lima", codigo: "#32CD32" },
+    { nome: "Amarelo", codigo: "#FFFF00" },
+    { nome: "Laranja", codigo: "#FFA500" },
+    { nome: "Vermelho", codigo: "#FF0000" },
+    { nome: "Marrom", codigo: "#8B4513" }
+];
 
 function EditarProduto() {
     const { id } = useParams();
@@ -30,6 +55,10 @@ function EditarProduto() {
 
     const [nome, setNome] = useState("");
     const [preco, setPreco] = useState("");
+    const [precoPix, setPrecoPix] = useState("");
+    const [precoBoleto, setPrecoBoleto] = useState("");
+    const [parcelas, setParcelas] = useState("10");
+    const [jurosParcelas, setJurosParcelas] = useState("");
     const [categoria, setCategoria] = useState("");
     const [publico, setPublico] = useState("");
     const [faixaEtaria, setFaixaEtaria] = useState("");
@@ -39,8 +68,6 @@ function EditarProduto() {
     const [precoPromocional, setPrecoPromocional] = useState("");
     const [tamanhosSelecionados, setTamanhosSelecionados] = useState([]);
     const [cores, setCores] = useState([]);
-    const [nomeCor, setNomeCor] = useState("");
-    const [codigoCor, setCodigoCor] = useState("#FF97C0");
 
     useEffect(() => {
         const carregarProduto = async () => {
@@ -51,6 +78,10 @@ function EditarProduto() {
 
                 setNome(data.nome || "");
                 setPreco(data.preco || "");
+                setPrecoPix(data.preco_pix || "");
+                setPrecoBoleto(data.preco_boleto || "");
+                setParcelas(data.parcelas || "10");
+                setJurosParcelas(data.juros_parcelas || "");
                 setCategoria(data.categoria?.id || "");
                 setPublico(data.publico || "");
                 setFaixaEtaria(data.faixa_etaria || "");
@@ -91,29 +122,12 @@ function EditarProduto() {
         }
     }
 
-    function adicionarCor() {
-        if (nomeCor.trim() === "") {
-            alert("Informe o nome da cor.");
-            return;
+    function toggleCor(cor) {
+        if (cores.some(c => c.nome === cor.nome)) {
+            setCores(cores.filter(c => c.nome !== cor.nome));
+        } else {
+            setCores([...cores, cor]);
         }
-
-        const corJaExiste = cores.some(
-            (cor) => cor.nome.toLowerCase() === nomeCor.trim().toLowerCase()
-        );
-
-        if (corJaExiste) {
-            alert("Essa cor já foi adicionada.");
-            return;
-        }
-
-        const novaCor = {
-            nome: nomeCor.trim(),
-            codigo: codigoCor
-        };
-
-        setCores([...cores, novaCor]);
-        setNomeCor("");
-        setCodigoCor("#FF97C0");
     }
 
     function removerCor(nomeDaCor) {
@@ -179,6 +193,14 @@ function EditarProduto() {
         });
     }
 
+    const calcularPrecoComDesconto = (precoBase) => {
+        if (!precoBase || isNaN(Number(precoBase))) return "";
+        return (Number(precoBase) * 0.95).toFixed(2);
+    };
+
+    const precoPixFinal = precoPix || calcularPrecoComDesconto(preco);
+    const precoBoletoFinal = precoBoleto || calcularPrecoComDesconto(preco);
+
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -224,7 +246,7 @@ function EditarProduto() {
         }
 
         if (cores.length === 0) {
-            alert("Adicione pelo menos uma cor.");
+            alert("Selecione pelo menos uma cor.");
             return;
         }
 
@@ -253,6 +275,10 @@ function EditarProduto() {
 
         produtoAtualizado.append("nome", nome.trim());
         produtoAtualizado.append("preco", Number(preco));
+        produtoAtualizado.append("preco_pix", Number(precoPixFinal) || 0);
+        produtoAtualizado.append("preco_boleto", Number(precoBoletoFinal) || 0);
+        produtoAtualizado.append("parcelas", String(parcelas));
+        produtoAtualizado.append("juros_parcelas", Number(jurosParcelas) || 0);
         produtoAtualizado.append("em_promocao", emPromocao);
 
         if (emPromocao) {
@@ -366,6 +392,7 @@ function EditarProduto() {
                                     onChange={(event) => setCategoria(event.target.value)}
                                 >
                                     <option value="">Selecione o tipo de peça</option>
+<<<<<<< HEAD
                                     <option value="3">Vestidos</option>
                                     <option value="4">Conjuntos</option>
                                     <option value="5">Blusas</option>
@@ -373,6 +400,15 @@ function EditarProduto() {
                                     <option value="7">Shorts</option>
                                     <option value="8">Macacões</option>
                                     <option value="9">Outras peças</option>
+=======
+                                    <option value="1">Vestidos</option>
+                                    <option value="2">Conjuntos</option>
+                                    <option value="3">Blusas</option>
+                                    <option value="4">Calças</option>
+                                    <option value="5">Shorts</option>
+                                    <option value="6">Macacões</option>
+                                    <option value="7">Outras peças</option>
+>>>>>>> origin/feature/melhorias-cliente
                                 </select>
                             </div>
                         </div>
@@ -389,6 +425,73 @@ function EditarProduto() {
                                 <option value="B">Bebês</option>
                                 <option value="U">Unissex</option>
                             </select>
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label>Preço no PIX</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0.01"
+                                    placeholder="R$ 94,90"
+                                    value={precoPix}
+                                    onChange={(e) => setPrecoPix(e.target.value)}
+                                />
+                                <small>Deixe em branco para calcular 5% de desconto</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Preço no Boleto</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0.01"
+                                    placeholder="R$ 94,90"
+                                    value={precoBoleto}
+                                    onChange={(e) => setPrecoBoleto(e.target.value)}
+                                />
+                                <small>Deixe em branco para calcular 5% de desconto</small>
+                            </div>
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label>Parcelas no cartão</label>
+                                <select
+                                    value={parcelas}
+                                    onChange={(e) => setParcelas(e.target.value)}
+                                >
+                                    <option value="1">1x</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="4">4x</option>
+                                    <option value="5">5x</option>
+                                    <option value="6">6x</option>
+                                    <option value="7">7x</option>
+                                    <option value="8">8x</option>
+                                    <option value="9">9x</option>
+                                    <option value="10">10x</option>
+                                    <option value="11">11x</option>
+                                    <option value="12">12x</option>
+                                </select>
+                                <small>
+                                    Valor da parcela: {formatPrice(Number(preco || 0) / Number(parcelas || 1))}
+                                </small>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Juros por parcela (%)</label>
+                                <input
+                                    type="number"
+                                    step="0.1"
+                                    min="0"
+                                    placeholder="0"
+                                    value={jurosParcelas}
+                                    onChange={(e) => setJurosParcelas(e.target.value)}
+                                />
+                                <small>Deixe em branco para parcelas sem juros</small>
+                            </div>
                         </div>
 
                         <div className="promotion-box">
@@ -437,7 +540,7 @@ function EditarProduto() {
                                     { id: 12, nome: "10" },
                                     { id: 13, nome: "12" },
                                     { id: 14, nome: "14" },
-                                    { id: 15, nome: "16" }
+                                    { id: 15, nome: "16" },
                                 ].map((tamanho) => (
                                     <label className="checkbox-option" key={tamanho.id}>
                                         <input
@@ -451,8 +554,10 @@ function EditarProduto() {
                             </div>
                         </div>
 
+                        {/* cores fixas */}
                         <div className="form-group">
                             <label>Cores disponíveis</label>
+<<<<<<< HEAD
                             <div className="color-form">
                                 <input
                                     type="text"
@@ -486,8 +591,38 @@ function EditarProduto() {
                                             <IoIosClose />
                                         </button>
                                     </div>
+=======
+                            <div className="cores-fixas-grid">
+                                {coresFixas.map((cor) => (
+                                    <button
+                                        key={cor.nome}
+                                        type="button"
+                                        className={`cor-fixa ${cores.some(c => c.nome === cor.nome) ? "selected" : ""} ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                        style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
+                                        title={cor.nome}
+                                        onClick={() => toggleCor(cor)}
+                                    />
+>>>>>>> origin/feature/melhorias-cliente
                                 ))}
                             </div>
+                            <small>Clique nas cores para adicionar ou remover</small>
+
+                            {cores.length > 0 && (
+                                <div className="selected-colors">
+                                    {cores.map((cor) => (
+                                        <div className="selected-color" key={cor.nome}>
+                                            <span
+                                                className="color-circle"
+                                                style={{ backgroundColor: cor.codigo }}
+                                            />
+                                            <span>{cor.nome}</span>
+                                            <button type="button" onClick={() => removerCor(cor.nome)}>
+                                                <IoIosClose />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-row">

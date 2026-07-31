@@ -1,6 +1,8 @@
+// src/components/ProductCard/ProductCard.jsx
+
 import "../ProductCard/ProductCard.css";
 import { Link } from "react-router-dom";
-import formatPrice from "../../utils/formatPrice";
+import formatPrice from "../../utils/FormatPrice";
 
 function ProductCard({
     id,
@@ -10,7 +12,11 @@ function ProductCard({
     emPromocao,
     precoPromocional,
     categoria,
-    cores = []
+    cores = [],
+    precoPix = null,
+    parcelas = null,
+    valorParcela = null,
+    jurosParcelas = 0
 }) {
     const estaEmPromocao =
         emPromocao &&
@@ -19,84 +25,90 @@ function ProductCard({
 
     const temImagem = imagem && imagem.trim() !== "";
 
+    const precoExibido = estaEmPromocao ? Number(precoPromocional) : Number(preco);
+    const precoOriginal = Number(preco);
+    const precoPixExibido = precoPix ? Number(precoPix) : (precoExibido * 0.95);
+    const parcelasExibidas = Number(parcelas) || 10;
+    const valorParcelaExibido = valorParcela || (precoExibido / parcelasExibidas);
+
     return (
         <Link
             to={`/produtos/${id}`}
-            className="product-link"
+            className="product-card-link"
         >
             <div className="product-card">
-                <div className="product-image-container">
+                <div className="product-card-image">
                     {temImagem ? (
                         <img
                             src={imagem}
                             alt={nome}
+                            loading="lazy"
                             onError={(e) => {
                                 e.target.style.display = 'none';
-                                e.target.parentElement.innerHTML = `
-                                    <div class="placeholder-image">
-                                        <span>Sem imagem</span>
-                                    </div>
-                                `;
+                                const placeholder = e.target.parentElement.querySelector('.product-card-placeholder');
+                                if (placeholder) placeholder.style.display = 'flex';
                             }}
                         />
                     ) : (
-                        <div className="placeholder-image">
+                        <div className="product-card-placeholder">
                             <span>Sem imagem</span>
                         </div>
                     )}
                     
                     {estaEmPromocao && (
-                        <span className="promotion-badge">
-                            OFERTA
-                        </span>
+                        <span className="product-card-badge">Oferta</span>
                     )}
                 </div>
 
                 <div className="product-card-info">
-                    <h3>{nome}</h3>
-
-                    {categoria && (
-                        <span className="product-category">
-                            {categoria}
-                        </span>
-                    )}
+                    <h3 className="product-card-name">{nome}</h3>
 
                     {cores && cores.length > 0 && (
-                        <div className="product-colors">
+                        <div className="product-card-colors">
                             {cores.slice(0, 4).map((cor, index) => (
                                 <span
                                     key={index}
-                                    className="color-dot"
-                                    style={{ backgroundColor: cor.codigo }}
+                                    className={`product-card-color-dot ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                    style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
                                     title={cor.nome}
                                 />
                             ))}
                             {cores.length > 4 && (
-                                <span className="more-colors">
+                                <span className="product-card-more-colors">
                                     +{cores.length - 4}
                                 </span>
                             )}
                         </div>
                     )}
 
-                    {estaEmPromocao ? (
-                        <div className="promotion-prices">
-                            <span className="original-price">
-                                {formatPrice(preco)}
-                            </span>
-                            <strong className="promotion-price">
-                                {formatPrice(precoPromocional)}
+                    <div className="product-card-prices">
+                        {estaEmPromocao ? (
+                            <>
+                                <span className="product-card-original-price">
+                                    {formatPrice(precoOriginal)}
+                                </span>
+                                <strong className="product-card-price">
+                                    {formatPrice(precoPromocional)}
+                                </strong>
+                            </>
+                        ) : (
+                            <strong className="product-card-price">
+                                {formatPrice(precoExibido)}
                             </strong>
-                        </div>
-                    ) : (
-                        <p className="price">
-                            {formatPrice(preco)}
-                        </p>
-                    )}
+                        )}
+                    </div>
 
-                    <span className="details-button">
-                        Ver Produto
-                    </span>
+                    <div className="product-card-payment">
+                        <span className="product-card-pix">
+                            {formatPrice(precoPixExibido)} no PIX
+                        </span>
+                        {parcelasExibidas > 1 && (
+                            <span className="product-card-installment">
+                                ou {parcelasExibidas}x de {formatPrice(valorParcelaExibido)}
+                                {jurosParcelas > 0 && ` com juros`}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
         </Link>

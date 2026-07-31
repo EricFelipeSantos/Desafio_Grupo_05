@@ -10,6 +10,8 @@ import { useProducts } from "../../context/ProductContext/ProductContext";
 
 import { FaUser, FaWhatsapp } from "react-icons/fa";
 
+import { isCorColorido, getCorStyle, getCorClass } from "../../utils/colorUtils";
+
 function Checkout() {
     const {
         cartItems,
@@ -23,14 +25,71 @@ function Checkout() {
     const { getImageUrl } = useProducts();
 
     const [formaPagamento, setFormaPagamento] = useState("");
+    const [parcelasSelecionadas, setParcelasSelecionadas] = useState(1);
     const [cliente, setCliente] = useState({
         nome: "",
         telefone: "",
         endereco: "",
-        observacoes: ""
     });
 
     const [erros, setErros] = useState({});
+
+    const primeiroItem = cartItems[0];
+    
+    const parcelasDisponiveis = primeiroItem?.parcelas || 10;
+    const jurosParcelas = primeiroItem?.jurosParcelas || 0;
+    
+    const precoTotal = totalPrice;
+
+    // PIX e Boleto = valor cheio (sem desconto)
+    const precoPix = precoTotal;
+    const precoBoleto = precoTotal;
+
+    const calcularValorParcela = (preco, parcelas, juros) => {
+        if (!preco || !parcelas || parcelas === 0) return 0;
+        const precoBase = Number(preco);
+        const numParcelas = Number(parcelas);
+        const taxaJuros = Number(juros) || 0;
+        
+        if (taxaJuros === 0) {
+            return precoBase / numParcelas;
+        }
+        return (precoBase * (1 + taxaJuros / 100)) / numParcelas;
+    };
+
+    const gerarOpcoesParcelas = () => {
+        const opcoes = [];
+        const maxParcelas = Number(parcelasDisponiveis) || 1;
+        
+        for (let i = 1; i <= maxParcelas; i++) {
+            const valor = calcularValorParcela(precoTotal, i, jurosParcelas);
+            opcoes.push({
+                parcelas: i,
+                valor: valor,
+                total: valor * i,
+                comJuros: jurosParcelas > 0 && i > 1
+            });
+        }
+        return opcoes;
+    };
+
+    const opcoesParcelas = gerarOpcoesParcelas();
+
+    const getValorPagamento = () => {
+        switch(formaPagamento) {
+            case "Pix":
+                return precoPix;
+            case "Cartão":
+                const parcelaSelecionada = opcoesParcelas.find(p => p.parcelas === parcelasSelecionadas);
+                return parcelaSelecionada ? parcelaSelecionada.total : precoTotal;
+            case "Boleto":
+                return precoBoleto;
+            default:
+                return precoTotal;
+        }
+    };
+
+    const valorFinal = getValorPagamento();
 
     function handleClienteChange(event) {
         const { name, value } = event.target;
@@ -67,6 +126,10 @@ function Checkout() {
             novosErros.formaPagamento = "Selecione uma forma de pagamento";
         }
 
+        if (formaPagamento === "Cartão" && !parcelasSelecionadas) {
+            novosErros.parcelas = "Selecione o número de parcelas";
+        }
+
         setErros(novosErros);
         return Object.keys(novosErros).length === 0;
     }
@@ -85,10 +148,6 @@ function Checkout() {
         mensagem += `*Telefone:* ${cliente.telefone}\n`;
         mensagem += `*Endereço:* ${cliente.endereco}\n`;
         
-        if (cliente.observacoes) {
-            mensagem += `*Observações:* ${cliente.observacoes}\n`;
-        }
-        
         mensagem += `\n*Pedido:*\n`;
 
         cartItems.forEach((item, index) => {
@@ -100,12 +159,20 @@ function Checkout() {
             mensagem += `   Tamanho: ${item.tamanho}\n`;
             mensagem += `   Cor: ${item.cor?.nome || "Não especificada"}\n`;
             mensagem += `   Preço unitário: ${formatPrice(precoProduto)}\n`;
-            mensagem += `   Subtotal: ${formatPrice(subtotal)}\n`;
         });
 
-        mensagem += `\n*Total: ${formatPrice(totalPrice)}*\n`;
-        mensagem += `*Forma de pagamento:* ${formaPagamento}\n\n`;
-        mensagem += `Aguardo a confirmação do pedido.\nObrigado(a)!`;
+        mensagem += `\n*Total: ${formatPrice(valorFinal)}*\n`;
+        mensagem += `*Forma de pagamento:* ${formaPagamento}\n`;
+        
+        if (formaPagamento === "Cartão") {
+            const parcelaSelecionada = opcoesParcelas.find(p => p.parcelas === parcelasSelecionadas);
+            mensagem += `*Parcelas:* ${parcelasSelecionadas}x de ${formatPrice(parcelaSelecionada?.valor || 0)}\n`;
+            if (jurosParcelas > 0 && parcelasSelecionadas > 1) {
+                mensagem += `*Juros:* ${jurosParcelas}%\n`;
+            }
+        }
+        
+        mensagem += `\nAguardo a confirmação do pedido.\nObrigado(a)!`;
 
         const whatsappUrl = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
 
@@ -113,25 +180,25 @@ function Checkout() {
         clearCart();
 
         const produtosComImagem = cartItems.map(item => {
-            let imagemUrl = null;
+            let imagemPath = null;
             
             if (item.imagem) {
                 if (typeof item.imagem === "string") {
                     if (item.imagem.startsWith("http")) {
-                        imagemUrl = item.imagem;
+                        // Extrai apenas o caminho
+                        const urlParts = item.imagem.split('/media/');
+                        if (urlParts.length > 1) {
+                            imagemPath = urlParts[1];
+                        } else {
+                            imagemPath = item.imagem;
+                        }
                     } else {
-                        imagemUrl = getImageUrl(item.imagem);
+                        imagemPath = item.imagem;
                     }
                 } else if (typeof item.imagem === "object" && item.imagem.imagem) {
-                    imagemUrl = getImageUrl(item.imagem.imagem);
+                    imagemPath = item.imagem.imagem;
                 }
             }
-            
-            if (!imagemUrl && item.imagem_url) {
-                imagemUrl = item.imagem_url;
-            }
-
-            console.log(`Produto ${item.nome}: imagem =`, imagemUrl);
 
             return {
                 id: item.id,
@@ -140,7 +207,7 @@ function Checkout() {
                 tamanho: item.tamanho,
                 cor: item.cor,
                 preco: getProductPrice(item),
-                imagem: imagemUrl
+                imagem: imagemPath
             };
         });
 
@@ -158,14 +225,11 @@ function Checkout() {
                 endereco: cliente.endereco
             },
             produtos: produtosComImagem,
-            total: totalPrice,
+            total: valorFinal,
             formaPagamento: formaPagamento,
+            parcelas: formaPagamento === "Cartão" ? parcelasSelecionadas : null,
             status: "Pendente"
         };
-
-        console.log("=== PEDIDO SALVO ===");
-        console.log("Pedido ID:", pedido.id);
-        console.log("Produtos:", pedido.produtos);
 
         pedidosSalvos.push(pedido);
         localStorage.setItem("pedidos", JSON.stringify(pedidosSalvos));
@@ -196,7 +260,11 @@ function Checkout() {
         );
     }
 
-    const pagamentos = ["Pix", "Cartão de crédito", "Cartão de débito", "Dinheiro"];
+    const pagamentos = [
+        { id: "Pix", label: "PIX", descricao: `${formatPrice(precoPix)}` },
+        { id: "Cartão", label: "Cartão", descricao: `Até ${parcelasDisponiveis}x` },
+        { id: "Boleto", label: "Boleto", descricao: `${formatPrice(precoBoleto)}` },
+    ];
 
     return (
         <>
@@ -258,18 +326,6 @@ function Checkout() {
                                         {erros.endereco && <span className="error-message">{erros.endereco}</span>}
                                         <small>Endereço para entrega</small>
                                     </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="observacoes">Observações</label>
-                                        <textarea
-                                            id="observacoes"
-                                            name="observacoes"
-                                            placeholder="Alguma observação sobre o pedido? (opcional)"
-                                            value={cliente.observacoes}
-                                            onChange={handleClienteChange}
-                                            rows="3"
-                                        />
-                                    </div>
                                 </form>
                             </section>
 
@@ -304,11 +360,11 @@ function Checkout() {
                                                     <p>Quantidade: {item.quantidade}</p>
                                                     {item.tamanho && <p>Tamanho: {item.tamanho}</p>}
                                                     {item.cor && (
-                                                        <p>
-                                                            Cor: 
+                                                        <p className="item-detail">
+                                                            <strong>Cor:</strong> 
                                                             <span 
-                                                                className="color-dot"
-                                                                style={{ backgroundColor: item.cor.codigo }}
+                                                                className={`color-dot ${getCorClass(item.cor)}`}
+                                                                style={getCorStyle(item.cor)}
                                                             />
                                                             {item.cor.nome}
                                                         </p>
@@ -328,7 +384,7 @@ function Checkout() {
 
                                 <div className="checkout-total">
                                     <span>Total ({totalItems} {totalItems === 1 ? "item" : "itens"})</span>
-                                    <strong>{formatPrice(totalPrice)}</strong>
+                                    <strong>{formatPrice(valorFinal)}</strong>
                                 </div>
                             </section>
 
@@ -337,22 +393,52 @@ function Checkout() {
 
                                 <form className="payment-form">
                                     {pagamentos.map(pgto => (
-                                        <label key={pgto} className={`payment-option ${erros.formaPagamento ? "error" : ""}`}>
+                                        <label key={pgto.id} className={`payment-option ${erros.formaPagamento ? "error" : ""}`}>
                                             <input
                                                 type="radio"
                                                 name="pagamento"
-                                                value={pgto}
-                                                checked={formaPagamento === pgto}
+                                                value={pgto.id}
+                                                checked={formaPagamento === pgto.id}
                                                 onChange={(e) => {
                                                     setFormaPagamento(e.target.value);
+                                                    setParcelasSelecionadas(1);
                                                     if (erros.formaPagamento) {
                                                         setErros(prev => ({ ...prev, formaPagamento: "" }));
                                                     }
                                                 }}
                                             />
-                                            <span>{pgto}</span>
+                                            <span className="payment-label">{pgto.label}</span>
+                                            <span className="payment-description">{pgto.descricao}</span>
                                         </label>
                                     ))}
+
+                                    {formaPagamento === "Cartão" && (
+                                        <div className="parcelas-section">
+                                            <label className="parcelas-label">Selecione as parcelas:</label>
+                                            <div className="parcelas-grid">
+                                                {opcoesParcelas.map((op) => (
+                                                    <button
+                                                        key={op.parcelas}
+                                                        type="button"
+                                                        className={`parcela-option ${parcelasSelecionadas === op.parcelas ? "selected" : ""}`}
+                                                        onClick={() => setParcelasSelecionadas(op.parcelas)}
+                                                    >
+                                                        <span className="parcela-qtd">{op.parcelas}x</span>
+                                                        <span className="parcela-valor">{formatPrice(op.valor)}</span>
+                                                        {op.comJuros && <span className="parcela-juros">com juros</span>}
+                                                        {op.parcelas === 1 && <span className="parcela-vista">à vista</span>}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            {erros.parcelas && <span className="error-message">{erros.parcelas}</span>}
+                                            
+                                            {jurosParcelas > 0 && (
+                                                <div className="juros-info">
+                                                    <small>Juros de {jurosParcelas}% ao mês</small>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
 
                                     {erros.formaPagamento && (
                                         <span className="error-message">{erros.formaPagamento}</span>
