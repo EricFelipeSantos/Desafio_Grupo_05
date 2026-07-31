@@ -37,7 +37,7 @@ class Produto(models.Model):
         ('M', 'Masculino'),
         ('F', 'Feminino'),
         ('B', 'Bebês'),
-        ('U', 'Unissex'),
+        ('P', 'Primeiros passos'),
     ]
 
     nome = models.CharField(max_length=150)
