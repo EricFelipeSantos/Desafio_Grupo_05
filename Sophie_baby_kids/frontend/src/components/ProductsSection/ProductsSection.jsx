@@ -10,6 +10,18 @@ function ProductsSection({
 }) {
     const { getImageUrl } = useProducts(); 
 
+    const calcularValorParcela = (preco, parcelas, juros) => {
+        if (!preco || !parcelas || parcelas === 0) return 0;
+        const precoBase = Number(preco);
+        const numParcelas = Number(parcelas);
+        const taxaJuros = Number(juros) || 0;
+        
+        if (taxaJuros === 0) {
+            return precoBase / numParcelas;
+        }
+        return (precoBase * (1 + taxaJuros / 100)) / numParcelas;
+    };
+
     const produtosExibidos = produtos.slice(0, 8);
 
     if (carregando) {
@@ -49,7 +61,6 @@ function ProductsSection({
                     <p>
                         {produtos.length} produto
                         {produtos.length !== 1 ? "s" : ""} encontrado
-                        {produtos.length !== 1 ? "s" : ""}
                     </p>
                 </div>
 
@@ -68,8 +79,8 @@ function ProductsSection({
                     <h3>Nenhum produto encontrado</h3>
                     <p>
                         {categoriaSelecionada === "Todos"
-                            ? "Não encontramos produtos disponíveis no momento."
-                            : `Não encontramos produtos na categoria "${categoriaSelecionada}".`
+                            ? "Nao encontramos produtos disponiveis no momento."
+                            : `Nao encontramos produtos na categoria "${categoriaSelecionada}".`
                         }
                     </p>
                 </div>
@@ -78,6 +89,21 @@ function ProductsSection({
                     {produtosExibidos.map((produto) => {
                         const imageUrl = getImageUrl(produto.imagens?.[0]?.imagem);
                         
+                        const estaEmPromocao = produto.em_promocao && 
+                            produto.preco_promocional && 
+                            Number(produto.preco_promocional) < Number(produto.preco);
+                        
+                        const precoBase = estaEmPromocao 
+                            ? Number(produto.preco_promocional) 
+                            : Number(produto.preco);
+                        
+                        const parcelas = Number(produto.parcelas) || 10;
+                        const juros = Number(produto.juros_parcelas) || 0;
+                        const valorParcela = calcularValorParcela(precoBase, parcelas, juros);
+                        const precoPix = produto.preco_pix 
+                            ? Number(produto.preco_pix) 
+                            : precoBase * 0.95;
+
                         return (
                             <ProductCard
                                 key={produto.id}
@@ -89,6 +115,10 @@ function ProductsSection({
                                 imagem={imageUrl}
                                 categoria={produto.categoria?.nome}
                                 cores={produto.cores}
+                                precoPix={precoPix}
+                                parcelas={parcelas}
+                                valorParcela={valorParcela}
+                                jurosParcelas={juros}
                             />
                         );
                     })}

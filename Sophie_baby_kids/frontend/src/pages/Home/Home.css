@@ -1,0 +1,40 @@
+.home-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+/* ===== LOADING ===== */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.loading-container p {
+    color: #888;
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+}
+
+/* ===== RESPONSIVIDADE GERAL ===== */
+@media (max-width: 768px) {
+    .loading-container {
+        min-height: 300px;
+    }
+
+    .loading-container p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-container {
+        min-height: 200px;
+    }
+
+    .loading-container p {
+        font-size: 14px;
+    }
+}

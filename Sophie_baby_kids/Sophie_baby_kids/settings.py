@@ -31,8 +31,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'sophie-baby-kids.onrender.com', # adicionando o domínio do Render
+    ##'SEU_IP_AQUI',
 ]
-
 
 # Application definition
 
@@ -88,9 +88,9 @@ WSGI_APPLICATION = 'Sophie_baby_kids.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default='sqlite:///db.sqlite3', # trocar para: os.getenv('DATABASE_URL') na hora de fazer o deploy
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False # muda para true dps
     )
 }
 
@@ -156,6 +156,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'https://sophie-baby-kids.vercel.app', # muda a url do vercel aqui
+    ##'SEU_IP_AQUI',
 ]
 
 # Default primary key field type

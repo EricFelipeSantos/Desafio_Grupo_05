@@ -2,7 +2,16 @@ import "../ProductInfo/ProductInfo.css";
 
 import { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext/CartContext";
-import { FaWhatsapp } from "react-icons/fa";
+import { 
+    FaWhatsapp, 
+    FaCreditCard, 
+    FaBarcode,
+    FaChevronDown,
+    FaChevronRight,
+    FaTags,
+} from "react-icons/fa";
+import { BiSolidDiscount } from "react-icons/bi";
+import { SiPix } from "react-icons/si";
 import formatPrice from "../../utils/FormatPrice";
 import { useProducts } from "../../context/ProductContext/ProductContext";
 
@@ -19,7 +28,11 @@ function ProductInfo({
     faixaEtaria,
     material,
     cores = [],
-    tamanhos = []
+    tamanhos = [],
+    precoPix = null,
+    precoBoleto = null,
+    parcelas = null,
+    jurosParcelas = null
 }) {
     const { getImageUrl } = useProducts();
     const { addToCart } = useCart();
@@ -31,6 +44,7 @@ function ProductInfo({
 
     const [corSelecionada, setCorSelecionada] = useState(null);
     const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
+    const [mostrarFormasPagamento, setMostrarFormasPagamento] = useState(false);
 
     const imagensProduto = imagens.length > 0 
         ? imagens.map((img) => getImageUrl(img.imagem)).filter(Boolean)
@@ -39,6 +53,39 @@ function ProductInfo({
             : [];
 
     const [imagemSelecionada, setImagemSelecionada] = useState(null);
+
+    const precoExibido = estaEmPromocao ? Number(precoPromocional) : Number(preco);
+    
+    const precoOriginal = Number(preco);
+    
+    const precoPixExibido = precoPix ? Number(precoPix) : (precoOriginal * 0.95);
+    
+    // usa o valor de parcelas do produto
+    const parcelasExibidas = Number(parcelas) || 1;
+    const juros = Number(jurosParcelas) || 0;
+
+    // calcula as parcelas com base no preco original
+    const calcularValorParcela = (precoBase, numParcelas, taxaJuros) => {
+        if (!precoBase || !numParcelas || numParcelas === 0) return 0;
+        const precoBaseNumber = Number(precoBase);
+        const numParcelasNumber = Number(numParcelas);
+        const taxaJurosNumber = Number(taxaJuros) || 0;
+        if (taxaJurosNumber === 0) {
+            return precoBaseNumber / numParcelasNumber;
+        }
+        return (precoBaseNumber * (1 + taxaJurosNumber / 100)) / numParcelasNumber;
+    };
+
+    const valorParcelaExibido = calcularValorParcela(precoOriginal, parcelasExibidas, juros);
+
+    // gera as opcoes de parcela com base no preco original
+    const opcoesParcelas = [];
+    for (let i = 1; i <= parcelasExibidas; i++) {
+        opcoesParcelas.push({
+            parcelas: i,
+            valor: calcularValorParcela(precoOriginal, i, juros)
+        });
+    }
 
     useEffect(() => {
         if (imagensProduto.length > 0) {
@@ -82,15 +129,16 @@ function ProductInfo({
         addToCart({
             id,
             nome,
-            preco: estaEmPromocao 
-                ? Number(precoPromocional) 
-                : Number(preco),
-            precoOriginal: Number(preco),
+            preco: precoExibido,
+            precoOriginal: precoOriginal,
             emPromocao: estaEmPromocao,
             imagem: imagemCarrinho,
             categoria: categoria?.nome || categoria,
             cor: corSelecionada,
-            tamanho: nomeTamanho
+            tamanho: nomeTamanho,
+            precoPix: precoPixExibido,
+            parcelas: parcelasExibidas,
+            jurosParcelas: juros
         });
 
         alert("Produto adicionado ao carrinho!");
@@ -108,7 +156,6 @@ function ProductInfo({
         }
 
         const numeroWhatsApp = "5537999023869";
-        const precoProduto = estaEmPromocao ? precoPromocional : preco;
         const nomeTamanho = typeof tamanhoSelecionado === 'string' 
             ? tamanhoSelecionado 
             : tamanhoSelecionado.nome;
@@ -117,7 +164,8 @@ function ProductInfo({
             "Olá! Gostaria de comprar este produto:",
             "",
             "*Produto:* " + nome,
-            "*Preço:* " + formatPrice(precoProduto),
+            "*Preço à vista (PIX):* " + formatPrice(precoPixExibido),
+            "*Parcelado:* até " + parcelasExibidas + "x de " + formatPrice(valorParcelaExibido),
             "*Cor:* " + corSelecionada.nome,
             "*Tamanho:* " + nomeTamanho,
             "",
@@ -125,9 +173,23 @@ function ProductInfo({
         ];
 
         const mensagem = linhas.join("\n");
-
         const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
         window.open(url, "_blank");
+    }
+
+    // funcao para verificar se a cor é colorido
+    function isCorColorido(cor) {
+        return cor.nome === "Colorido" || cor.nome === "colorido";
+    }
+
+    // funcao para obter estilo da cor
+    function getCorStyle(cor) {
+        if (isCorColorido(cor)) {
+            return { 
+                background: "conic-gradient(red, orange, yellow, green, blue, indigo, violet)"
+            };
+        }
+        return { backgroundColor: cor.codigo };
     }
 
     return (
@@ -183,30 +245,74 @@ function ProductInfo({
                         <h2 className="product-price">
                             {formatPrice(precoPromocional)}
                         </h2>
-                        <span className="promotion-label">OFERTA</span>
+                        <span className="promotion-label">
+                            <BiSolidDiscount /> OFERTA
+                        </span>
                     </div>
                 ) : (
                     <h2 className="product-price">{formatPrice(preco)}</h2>
                 )}
 
+                <div className="product-payment-info">
+                    <div className="payment-row">
+                        <span className="pix-price">
+                            <SiPix /> {formatPrice(precoPixExibido)} no PIX
+                        </span>
+                    </div>
+                    <div className="payment-row">
+                        <span className="installment-info">
+                            <FaCreditCard /> ou até {parcelasExibidas}x de {formatPrice(valorParcelaExibido)}
+                            {juros > 0 && ` (com ${juros}% de juros)`}
+                        </span>
+                    </div>
+                    <button 
+                        className="payment-methods-button"
+                        onClick={() => setMostrarFormasPagamento(!mostrarFormasPagamento)}
+                    >
+                        {mostrarFormasPagamento ? <FaChevronDown /> : <FaChevronRight />} 
+                        Formas de pagamento
+                    </button>
+                    
+                    {mostrarFormasPagamento && (
+                        <div className="payment-methods-detail">
+                            <p>
+                                <FaBarcode style={{ color: '#6c5ce7' }} /> 
+                                <strong>Boleto:</strong> {formatPrice(precoBoleto)} (à vista)
+                            </p>
+                            <div className="all-installments">
+                                <strong><FaTags /> Todas as opções de parcelas:</strong>
+                                <div className="installments-grid">
+                                    {opcoesParcelas.map((op, index) => (
+                                        <span key={index} className="installment-option">
+                                            {op.parcelas}x de {formatPrice(op.valor)}
+                                            {op.parcelas === 1 && " (à vista)"}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {cores && cores.length > 0 && (
                     <div className="product-option-section">
                         <h3>Cor</h3>
                         <div className="colors">
-                            {cores.map((cor) => (
-                                <button
-                                    key={cor.nome}
-                                    type="button"
-                                    className={`color ${
-                                        corSelecionada?.nome === cor.nome
-                                            ? "selected"
-                                            : ""
-                                    }`}
-                                    style={{ backgroundColor: cor.codigo }}
-                                    title={cor.nome}
-                                    onClick={() => setCorSelecionada(cor)}
-                                />
-                            ))}
+                            {cores.map((cor) => {
+                                const isSelected = corSelecionada?.nome === cor.nome;
+                                const isColorido = isCorColorido(cor);
+                                
+                                return (
+                                    <button
+                                        key={cor.nome}
+                                        type="button"
+                                        className={`color ${isSelected ? "selected" : ""} ${isColorido ? "colorido" : ""}`}
+                                        style={getCorStyle(cor)}
+                                        title={cor.nome}
+                                        onClick={() => setCorSelecionada(cor)}
+                                    />
+                                );
+                            })}
                         </div>
                         {corSelecionada && (
                             <span className="selected-option">
@@ -248,7 +354,9 @@ function ProductInfo({
                                     : tamanhoSelecionado.nome}
                             </span>
                         )}
-                        <p className="stock">✓ Em estoque</p>
+                        <p className="stock">
+                            Em estoque
+                        </p>
                     </div>
                 )}
 

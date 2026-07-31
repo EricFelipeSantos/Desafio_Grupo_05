@@ -11,8 +11,10 @@ import { useCart } from "../../context/CartContext/CartContext";
 
 import { 
     FaBox, FaUser, FaShoppingBag, FaMoneyBill, FaPhone, FaHome, 
-    FaSearch, FaTimes, FaArrowLeft, FaWhatsapp 
+    FaSearch, FaTimes, FaArrowLeft, FaWhatsapp, FaImage
 } from "react-icons/fa";
+
+import { isCorColorido, getCorStyle, getCorClass } from "../../utils/colorUtils";
 
 function Pedidos() {
     const [pedidos, setPedidos] = useState([]);
@@ -43,13 +45,22 @@ function Pedidos() {
 
     function obterImagem(imagem) {
         if (!imagem) return null;
+        
         if (typeof imagem === "string") {
-            if (imagem.startsWith("http")) return imagem;
+            if (imagem.startsWith("http")) {
+                return imagem;
+            }
             return getImageUrl(imagem);
         }
+        
         if (typeof imagem === "object" && imagem.imagem) {
-            return getImageUrl(imagem.imagem);
+            const path = imagem.imagem;
+            if (path.startsWith("http")) {
+                return path;
+            }
+            return getImageUrl(path);
         }
+        
         return null;
     }
 
@@ -243,7 +254,7 @@ function Pedidos() {
                                 </div>
 
                                 <div className="customer-info">
-                                    <strong><FaUser /> Cliente</strong>
+                                    <strong>Cliente</strong>
                                     <p><FaUser className="info-icon" /> {pedido.cliente?.nome || "Cliente não informado"}</p>
                                     <p><FaPhone className="info-icon" /> {pedido.cliente?.telefone || "Telefone não informado"}</p>
                                     <p><FaHome className="info-icon" /> {pedido.cliente?.endereco || "Endereço não informado"}</p>
@@ -262,9 +273,19 @@ function Pedidos() {
                                         return (
                                             <div className="order-product" key={`${produto.id}-${produto.tamanho}-${nomeCor}-${index}`}>
                                                 {imagemProduto ? (
-                                                    <img src={imagemProduto} alt={produto.nome} />
+                                                    <img 
+                                                        src={imagemProduto} 
+                                                        alt={produto.nome}
+                                                        onError={(e) => {
+                                                            e.target.style.display = 'none';
+                                                            const placeholder = e.target.parentElement.querySelector('.order-product-placeholder');
+                                                            if (placeholder) {
+                                                                placeholder.style.display = 'flex';
+                                                            }
+                                                        }}
+                                                    />
                                                 ) : (
-                                                    <div className="order-product-placeholder"><FaShoppingBag /></div>
+                                                    <div className="order-product-placeholder"><FaImage /></div>
                                                 )}
 
                                                 <div className="order-product-info">
@@ -272,7 +293,10 @@ function Pedidos() {
                                                     {nomeCor && (
                                                         <p>
                                                             Cor: 
-                                                            <span className="color-dot" style={{ backgroundColor: produto.cor?.codigo || "#ccc" }} />
+                                                            <span 
+                                                                className={`color-dot ${getCorClass(produto.cor)}`}
+                                                                style={getCorStyle(produto.cor)}
+                                                            />
                                                             {nomeCor}
                                                         </p>
                                                     )}
@@ -296,7 +320,7 @@ function Pedidos() {
                     </div>
 
                     <button className="back-button" onClick={() => navigate("/dashboard")}>
-                        <FaArrowLeft /> Voltar ao Dashboard
+                        <FaArrowLeft /> Voltar
                     </button>
                 </section>
             </main>

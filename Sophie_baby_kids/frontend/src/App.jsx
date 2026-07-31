@@ -16,6 +16,7 @@ import EditarProduto from "./pages/EditarProduto/EditarProduto";
 import Pedidos from "./pages/Pedidos/Pedidos";
 import GerenciarBanners from "./pages/GerenciarBanners/GerenciarBanners";
 import PedidoConfirmado from "./pages/PedidoConfirmado/PedidoConfirmado";
+import WhatsAppButton from "./components/WhatsAppButton/WhatsAppButton";
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/pedidos" element={<Pedidos />} />
                 <Route path="/gerenciar-banners" element={<GerenciarBanners />} />
             </Routes>
+            <WhatsAppButton />
         </BrowserRouter>
     );
 }
