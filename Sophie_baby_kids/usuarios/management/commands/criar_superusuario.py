@@ -6,6 +6,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         User = get_user_model()
+
+        username = "admin"
         email = "maxwerda@hotmail.com"
         password = "SophieBaby@2026#Kids"
 
@@ -13,5 +15,12 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Superusuário já existe."))
             return
 
-        User.objects.create_superuser(email=email, password=password)
-        self.stdout.write(self.style.SUCCESS(f"Superusuário {email} criado com sucesso."))
+        User.objects.create_superuser(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        self.stdout.write(
+            self.style.SUCCESS(f"Superusuário {email} criado com sucesso.")
+        )
