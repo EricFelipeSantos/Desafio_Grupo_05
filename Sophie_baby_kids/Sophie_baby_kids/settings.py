@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'sophie-baby-kids-api.onrender.com',
-    ' desafio-grupo-05.vercel.app',
+    'desafio-grupo-05.vercel.app',
 ]
 
 # Application definition
