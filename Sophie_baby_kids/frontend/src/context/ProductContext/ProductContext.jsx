@@ -8,6 +8,7 @@ import {
 const ProductContext = createContext();
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/produtos/";
+const BASE_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : "http://127.0.0.1:8000";
 
 export function ProductProvider({ children }) {
     const [produtos, setProdutos] = useState([]);
@@ -15,10 +16,24 @@ export function ProductProvider({ children }) {
     const [erro, setErro] = useState(null);
 
     const getImageUrl = (imagemPath) => {
-        if (!imagemPath) return null;
-        if (imagemPath.startsWith('http')) return imagemPath;
-        const baseUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
-        return `${baseUrl}/media/${imagemPath}`;
+         if (!imagemPath) {
+        console.log("❌ imagemPath é null/undefined");
+        return null;
+    }
+    
+    if (imagemPath.startsWith('http')) {
+        console.log("✅ É URL completa:", imagemPath);
+        return imagemPath;
+    }
+        
+        // remove barras extras e garante o caminho correto
+        const path = imagemPath.startsWith('/') ? imagemPath.slice(1) : imagemPath;
+        
+        if (path.startsWith('media/')) {
+            return `${BASE_URL}/${path}`;
+        }
+        
+        return `${BASE_URL}/media/${path}`;
     };
 
     const getToken = () => {
@@ -37,7 +52,6 @@ export function ProductProvider({ children }) {
         return headers;
     };
 
-    // calcula o valor da parcela com ou sem juros
     const calcularValorParcela = (preco, parcelas, juros) => {
         if (!preco || !parcelas || parcelas === 0) return 0;
         const precoBase = Number(preco);
@@ -50,30 +64,25 @@ export function ProductProvider({ children }) {
         return (precoBase * (1 + taxaJuros / 100)) / numParcelas;
     };
 
-    // calcula 5% de desconto para pix
     const calcularPrecoPix = (preco) => {
         if (!preco) return 0;
         return Number(preco) * 0.95;
     };
 
-    // calcula 5% de desconto para boleto
     const calcularPrecoBoleto = (preco) => {
         if (!preco) return 0;
         return Number(preco) * 0.95;
     };
 
-    // processa o produto com todas as informações de pagamento
     const processarProduto = (produto) => {
         const precoBase = Number(produto.preco);
         
-        // calcula os precos com base no precoBase
         const precoPix = produto.preco_pix || calcularPrecoPix(precoBase);
         const precoBoleto = produto.preco_boleto || calcularPrecoBoleto(precoBase);
         const parcelas = produto.parcelas || 10;
         const juros = produto.juros_parcelas || 0;
         const valorParcela = calcularValorParcela(precoBase, parcelas, juros);
 
-        // gera todas as opcoes de parcelas de 1 ate o maximo
         const opcoesParcelas = [];
         for (let i = 1; i <= Number(parcelas); i++) {
             opcoesParcelas.push({
@@ -85,7 +94,7 @@ export function ProductProvider({ children }) {
 
         return {
             ...produto,
-            precoBase, // preco que sera usado como base para tudo
+            precoBase,
             precoPix: Number(precoPix),
             precoBoleto: Number(precoBoleto),
             parcelas: Number(parcelas),

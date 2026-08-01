@@ -8,7 +8,9 @@ import Footer from "../../components/Footer/Footer";
 
 import { FaUserLock, FaEnvelope, FaLock } from "react-icons/fa";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace('/api', '') 
+    : "http://127.0.0.1:8000";
 const API_URL = `${BASE_URL}/api/auth/login/`;
 
 function Login() {

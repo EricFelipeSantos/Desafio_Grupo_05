@@ -13,6 +13,9 @@ import dj_database_url
 import os
 from pathlib import Path
 from datetime import timedelta # função que permite definir os intervalos de tempo
+from dotenv import load_dotenv 
+
+load_dotenv()  
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,7 +36,8 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'sophie-baby-kids-api.onrender.com'
+    'sophie-baby-kids-api.onrender.com',
+    'desafio-grupo-05.vercel.app',
 ]
 
 # Application definition
@@ -88,14 +92,23 @@ WSGI_APPLICATION = 'Sophie_baby_kids.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
-        conn_max_age=600,
-        ssl_require=not DEBUG,
-    )
-}
+if os.getenv('DATABASE_URL'):
+    # Produção - PostgreSQL (Render)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=False,
+        )
+    }
+else:
+    # Desenvolvimento local - SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -159,7 +172,8 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://desafio-grupo-05.vercel.app'
+    'https://desafio-grupo-05.vercel.app',
+    'https://sophie-baby-kids-api.onrender.com',
 ]
 
 # Default primary key field type
