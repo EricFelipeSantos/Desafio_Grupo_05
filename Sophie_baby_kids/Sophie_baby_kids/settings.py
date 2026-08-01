@@ -159,8 +159,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://sophie-baby-kids.vercel.app', # muda a url do vercel aqui
-    ##'SEU_IP_AQUI',
+    'https://desafio-grupo-05.vercel.app'
 ]
 
 # Default primary key field type
