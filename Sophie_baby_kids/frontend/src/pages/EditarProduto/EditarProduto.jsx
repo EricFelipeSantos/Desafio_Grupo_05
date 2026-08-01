@@ -392,15 +392,6 @@ function EditarProduto() {
                                     onChange={(event) => setCategoria(event.target.value)}
                                 >
                                     <option value="">Selecione o tipo de peça</option>
-<<<<<<< HEAD
-                                    <option value="3">Vestidos</option>
-                                    <option value="4">Conjuntos</option>
-                                    <option value="5">Blusas</option>
-                                    <option value="6">Calças</option>
-                                    <option value="7">Shorts</option>
-                                    <option value="8">Macacões</option>
-                                    <option value="9">Outras peças</option>
-=======
                                     <option value="1">Vestidos</option>
                                     <option value="2">Conjuntos</option>
                                     <option value="3">Blusas</option>
@@ -408,7 +399,6 @@ function EditarProduto() {
                                     <option value="5">Shorts</option>
                                     <option value="6">Macacões</option>
                                     <option value="7">Outras peças</option>
->>>>>>> origin/feature/melhorias-cliente
                                 </select>
                             </div>
                         </div>
@@ -557,52 +547,22 @@ function EditarProduto() {
                         {/* cores fixas */}
                         <div className="form-group">
                             <label>Cores disponíveis</label>
-<<<<<<< HEAD
-                            <div className="color-form">
-                                <input
-                                    type="text"
-                                    placeholder="Nome da cor"
-                                    value={nomeCor}
-                                    onChange={(event) => setNomeCor(event.target.value)}
-                                />
-                                <input
-                                    type="color"
-                                    value={codigoCor}
-                                    onChange={(event) => setCodigoCor(event.target.value)}
-                                />
-                                <button
-                                    type="button"
-                                    className="add-color-button"
-                                    onClick={adicionarCor}
-                                >
-                                    Adicionar cor
-                                </button>
-                            </div>
-
-                            <div className="selected-colors">
-                                {cores.map((cor) => (
-                                    <div className="selected-color" key={cor.nome}>
-                                        <span
-                                            className="color-circle"
-                                            style={{ backgroundColor: cor.codigo }}
-                                        />
-                                        <span>{cor.nome}</span>
-                                        <button type="button" onClick={() => removerCor(cor.nome)}>
-                                            <IoIosClose />
-                                        </button>
-                                    </div>
-=======
                             <div className="cores-fixas-grid">
                                 {coresFixas.map((cor) => (
                                     <button
                                         key={cor.nome}
                                         type="button"
-                                        className={`cor-fixa ${cores.some(c => c.nome === cor.nome) ? "selected" : ""} ${cor.nome === "Colorido" ? "colorido" : ""}`}
-                                        style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
+                                        className={`cor-fixa ${
+                                            cores.some(c => c.nome === cor.nome) ? "selected" : ""
+                                        } ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                        style={
+                                            cor.nome === "Colorido"
+                                                ? {}
+                                                : { backgroundColor: cor.codigo }
+                                        }
                                         title={cor.nome}
                                         onClick={() => toggleCor(cor)}
                                     />
->>>>>>> origin/feature/melhorias-cliente
                                 ))}
                             </div>
                             <small>Clique nas cores para adicionar ou remover</small>
