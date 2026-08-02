@@ -116,7 +116,7 @@ function Navbar() {
     }
 
     function handleCategoriaClick(publicoId, categoriaSlug) {
-        navigate(`/produtos?publico=${publicoId}&categoria=${categoriaSlug}`);
+        navigate(`/produtos?publico=${publicoId}&categoria=${categoriaId}`);
         setMenuAberto(false);
         setPublicoAtivo(null);
     }
@@ -260,7 +260,7 @@ function Navbar() {
                                                     <button
                                                         key={categoria.id}
                                                         className="subcategory-link"
-                                                        onClick={() => handleCategoriaClick(publico.id, categoria.slug)}
+                                                        onClick={() => handleCategoriaClick(publico.id, categoria.id)}
                                                     >
                                                         {categoria.nome}
                                                     </button>
