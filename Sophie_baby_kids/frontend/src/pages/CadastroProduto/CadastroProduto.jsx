@@ -306,15 +306,15 @@ function CadastroProduto() {
                                     </option>
 
                                     <option value="2">
-                                        Conjuntos
+                                        Conjuntos verão
                                     </option>
 
                                     <option value="3">
-                                        Blusas
+                                        Pijamas
                                     </option>
 
                                     <option value="4">
-                                        Calças
+                                        Calças jeans
                                     </option>
 
                                     <option value="5">
@@ -322,11 +322,39 @@ function CadastroProduto() {
                                     </option>
 
                                     <option value="6">
-                                        Macacões
+                                        Leggings
                                     </option>
 
                                     <option value="7">
-                                        Outras peças
+                                        Bermudas
+                                    </option>
+
+                                    <option value="8">
+                                        Conjuntos manga longa
+                                    </option>
+
+                                    <option value="9">
+                                        Bodys manga longa
+                                    </option>
+
+                                    <option value="10">
+                                        Bodys manga curta
+                                    </option>
+
+                                    <option value="11">
+                                        Mijões
+                                    </option>
+
+                                    <option value="12">
+                                        Tapa fralda
+                                    </option>
+
+                                    <option value="13">
+                                        Saída de maternidade
+                                    </option>
+
+                                    <option value="14">
+                                        Macacões
                                     </option>
                                 </select>
                             </div>
@@ -359,8 +387,8 @@ function CadastroProduto() {
                                     Bebês
                                 </option>
 
-                                <option value="U">
-                                    Unissex
+                                <option value="P">
+                                    Primeiros Passos
                                 </option>
                             </select>
                         </div>
