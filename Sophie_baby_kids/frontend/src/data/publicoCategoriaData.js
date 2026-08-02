@@ -1,4 +1,3 @@
-// muda pela API
 export const publicoCategorias = [
     {
         id: 'U',
@@ -6,12 +5,12 @@ export const publicoCategorias = [
         slug: 'primeiros-passos',
         categorias: [
             { id: 1, nome: 'Vestidos', slug: 'vestidos' },
-            { id: 2, nome: 'Conjuntos', slug: 'conjuntos' },
-            { id: 3, nome: 'Blusas', slug: 'blusas' },
-            { id: 4, nome: 'Calças', slug: 'calcas' },
+            { id: 2, nome: 'Conjuntos verão', slug: 'conjuntos-verao' },
+            { id: 3, nome: 'Pijamas', slug: 'pijamas' },
+            { id: 4, nome: 'Calças jeans', slug: 'calcas-jeans' },
             { id: 5, nome: 'Shorts', slug: 'shorts' },
-            { id: 6, nome: 'Macacões', slug: 'macacoes' },
-            { id: 7, nome: 'Outras peças', slug: 'outras-pecas' },
+            { id: 6, nome: 'Leggings', slug: 'leggings' },
+            { id: 7, nome: 'Bermudas', slug: 'bermudas' },
         ]
     },
     {
@@ -20,12 +19,18 @@ export const publicoCategorias = [
         slug: 'meninas',
         categorias: [
             { id: 1, nome: 'Vestidos', slug: 'vestidos' },
-            { id: 2, nome: 'Conjuntos', slug: 'conjuntos' },
-            { id: 3, nome: 'Blusas', slug: 'blusas' },
-            { id: 4, nome: 'Calças', slug: 'calcas' },
+            { id: 2, nome: 'Conjuntos verão', slug: 'conjuntos-verao' },
+            { id: 3, nome: 'Pijamas', slug: 'pijamas' },
+            { id: 4, nome: 'Calças jeans', slug: 'calcas-jeans' },
             { id: 5, nome: 'Shorts', slug: 'shorts' },
-            { id: 6, nome: 'Macacões', slug: 'macacoes' },
-            { id: 7, nome: 'Outras peças', slug: 'outras-pecas' },
+            { id: 6, nome: 'Leggings', slug: 'leggings' },
+            { id: 8, nome: 'Conjuntos manga longa', slug: 'conjuntos-manga-longa' },
+            { id: 9, nome: 'Bodys manga longa', slug: 'bodys-manga-longa' },
+            { id: 10, nome: 'Bodys manga curta', slug: 'bodys-manga-curta' },
+            { id: 11, nome: 'Mijões', slug: 'mijoes' },
+            { id: 12, nome: 'Tapa fralda', slug: 'tapa-fralda' },
+            { id: 13, nome: 'Saída de maternidade', slug: 'saida-de-maternidade' },
+            { id: 14, nome: 'Macacões', slug: 'macacoes' },
         ]
     },
     {
@@ -33,12 +38,17 @@ export const publicoCategorias = [
         nome: 'Meninos',
         slug: 'meninos',
         categorias: [
-            { id: 2, nome: 'Conjuntos', slug: 'conjuntos' },
-            { id: 3, nome: 'Blusas', slug: 'blusas' },
-            { id: 4, nome: 'Calças', slug: 'calcas' },
-            { id: 5, nome: 'Shorts', slug: 'shorts' },
-            { id: 6, nome: 'Macacões', slug: 'macacoes' },
-            { id: 7, nome: 'Outras peças', slug: 'outras-pecas' },
+            { id: 2, nome: 'Conjuntos verão', slug: 'conjuntos-verao' },
+            { id: 3, nome: 'Pijamas', slug: 'pijamas' },
+            { id: 4, nome: 'Calças jeans', slug: 'calcas-jeans' },
+            { id: 7, nome: 'Bermudas', slug: 'bermudas' },
+            { id: 8, nome: 'Conjuntos manga longa', slug: 'conjuntos-manga-longa' },
+            { id: 9, nome: 'Bodys manga longa', slug: 'bodys-manga-longa' },
+            { id: 10, nome: 'Bodys manga curta', slug: 'bodys-manga-curta' },
+            { id: 11, nome: 'Mijões', slug: 'mijoes' },
+            { id: 12, nome: 'Tapa fralda', slug: 'tapa-fralda' },
+            { id: 13, nome: 'Saída de maternidade', slug: 'saida-de-maternidade' },
+            { id: 14, nome: 'Macacões', slug: 'macacoes' },
         ]
     },
     {
@@ -46,12 +56,14 @@ export const publicoCategorias = [
         nome: 'Bebês',
         slug: 'bebes',
         categorias: [
-            { id: 8, nome: 'Enxoval', slug: 'enxoval' },
-            { id: 9, nome: 'Body', slug: 'body' },
-            { id: 6, nome: 'Macacões', slug: 'macacoes' },
-            { id: 10, nome: 'Mijão', slug: 'mijao' },
-            { id: 2, nome: 'Conjuntos', slug: 'conjuntos' },
-            { id: 7, nome: 'Outras peças', slug: 'outras-pecas' },
+            { id: 2, nome: 'Conjuntos verão', slug: 'conjuntos-verao' },
+            { id: 8, nome: 'Conjuntos manga longa', slug: 'conjuntos-manga-longa' },
+            { id: 9, nome: 'Bodys manga longa', slug: 'bodys-manga-longa' },
+            { id: 10, nome: 'Bodys manga curta', slug: 'bodys-manga-curta' },
+            { id: 11, nome: 'Mijões', slug: 'mijoes' },
+            { id: 12, nome: 'Tapa fralda', slug: 'tapa-fralda' },
+            { id: 13, nome: 'Saída de maternidade', slug: 'saida-de-maternidade' },
+            { id: 14, nome: 'Macacões', slug: 'macacoes' },
         ]
     }
 ];

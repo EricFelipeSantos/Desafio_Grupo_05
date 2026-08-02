@@ -15,6 +15,10 @@ function Produtos() {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [publicoSelecionado, setPublicoSelecionado] = useState(
+        searchParams.get("publico") || ""
+    );
+
     const [categoriaSelecionada, setCategoriaSelecionada] = useState(
         searchParams.get("categoria") || ""
     );
@@ -55,10 +59,12 @@ function Produtos() {
     useEffect(() => {
         const categoriaURL = searchParams.get("categoria") || "";
         const buscaURL = searchParams.get("busca") || "";
+        const publicoURL = searchParams.get("publico") || "";
         const filtrosURL = searchParams.get("filtros") === "true";
 
         setCategoriaSelecionada(categoriaURL);
         setBusca(buscaURL);
+        setPublicoSelecionado(publicoURL);
         setFiltrosAbertos(filtrosURL);
     }, [searchParams]);
 
@@ -139,8 +145,11 @@ function Produtos() {
 
         const categoriaValida =
             !categoriaSelecionada ||
-            nomeCategoria === categoriaNormalizada ||
-            nomePublico === categoriaNormalizada;
+            String(produto.categoria?.id) === String(categoriaSelecionada);
+
+        const publicoValido =
+            !publicoSelecionado ||
+            produto.publico === publicoSelecionado;
 
         const precoMinimoValido =
             !precoMinimo || precoProduto >= Number(precoMinimo);
@@ -163,6 +172,7 @@ function Produtos() {
         return (
             buscaValida &&
             categoriaValida &&
+            publicoValido &&
             precoMinimoValido &&
             precoMaximoValido &&
             tamanhoValido &&
