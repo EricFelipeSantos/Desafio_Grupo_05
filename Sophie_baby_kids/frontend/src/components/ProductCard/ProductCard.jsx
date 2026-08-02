@@ -1,5 +1,3 @@
-// src/components/ProductCard/ProductCard.jsx
-
 import "../ProductCard/ProductCard.css";
 import { Link } from "react-router-dom";
 import formatPrice from "../../utils/FormatPrice";
