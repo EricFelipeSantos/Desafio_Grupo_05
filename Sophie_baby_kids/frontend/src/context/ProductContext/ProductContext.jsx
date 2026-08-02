@@ -164,11 +164,8 @@ export function ProductProvider({ children }) {
                 throw new Error(textoResposta || "Erro ao cadastrar produto.");
             }
 
-            const dados = JSON.parse(textoResposta);
-            const produtoCompleto = await buscarProdutoPorId(dados.id);
-            setProdutos((produtosAtuais) => [...produtosAtuais, produtoCompleto]);
-
-            return produtoCompleto;
+            // recarrega a lista inteira em vez de buscar só o produto novo
+            await buscarProdutos();
 
         } catch (erro) {
             console.error("Erro ao adicionar produto:", erro);
