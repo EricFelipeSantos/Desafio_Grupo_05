@@ -115,7 +115,7 @@ function Navbar() {
         setPublicoAtivo(null);
     }
 
-    function handleCategoriaClick(publicoId, categoriaSlug) {
+    function handleCategoriaClick(publicoId, categoriaId) {
         navigate(`/produtos?publico=${publicoId}&categoria=${categoriaId}`);
         setMenuAberto(false);
         setPublicoAtivo(null);
@@ -448,7 +448,7 @@ function Navbar() {
                                 {publico.categorias.map((cat) => (
                                     <Link
                                         key={cat.id}
-                                        to={`/produtos?publico=${publico.id}&categoria=${cat.slug}`}
+                                        to={`/produtos?publico=${publico.id}&categoria=${cat.id}`}
                                         onClick={fecharMenu}
                                         className="mobile-subcategory-link"
                                     >
