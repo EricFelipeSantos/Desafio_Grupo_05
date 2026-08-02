@@ -360,6 +360,10 @@
     transition: transform 0.3s ease;
 }
 
+.color-circle.colorido {
+    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet) !important;
+}
+
 .selected-color:hover .color-circle {
     transform: scale(1.1);
 }

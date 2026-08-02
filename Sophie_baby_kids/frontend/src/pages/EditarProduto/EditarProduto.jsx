@@ -623,8 +623,8 @@ function EditarProduto() {
                                     {cores.map((cor) => (
                                         <div className="selected-color" key={cor.nome}>
                                             <span
-                                                className="color-circle"
-                                                style={{ backgroundColor: cor.codigo }}
+                                                className={`color-circle ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                                style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
                                             />
                                             <span>{cor.nome}</span>
                                             <button type="button" onClick={() => removerCor(cor.nome)}>
