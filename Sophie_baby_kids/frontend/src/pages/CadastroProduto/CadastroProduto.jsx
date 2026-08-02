@@ -657,6 +657,7 @@ function CadastroProduto() {
 
                                                 <button
                                                     type="button"
+                                                    className="remove-image-btn"
                                                     onClick={() =>
                                                         removerImagem(index)}
                                                 >
