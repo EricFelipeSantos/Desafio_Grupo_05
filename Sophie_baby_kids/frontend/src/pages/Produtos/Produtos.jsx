@@ -40,11 +40,13 @@ function Produtos() {
     );
 
     const categorias = [
-        "Todas",
-        ...new Set(
-            produtos
-                .map(p => p.categoria?.nome)
-                .filter(Boolean)
+        { id: "", nome: "Todas" },
+        ...Array.from(
+            new Map(
+                produtos
+                    .filter(p => p.categoria?.id && p.categoria?.nome)
+                    .map(p => [p.categoria.id, { id: p.categoria.id, nome: p.categoria.nome }])
+            ).values()
         )
     ];
 
@@ -68,18 +70,18 @@ function Produtos() {
         setFiltrosAbertos(filtrosURL);
     }, [searchParams]);
 
-    function selecionarCategoria(categoria) {
+    function selecionarCategoria(categoriaId) {
         const novosParametros = new URLSearchParams(searchParams);
 
-        if (categoria === "Todas") {
+        if (categoriaId === "") {
             setCategoriaSelecionada("");
             novosParametros.delete("categoria");
             setSearchParams(novosParametros);
             return;
         }
 
-        setCategoriaSelecionada(categoria);
-        novosParametros.set("categoria", categoria);
+        setCategoriaSelecionada(String(categoriaId));
+        novosParametros.set("categoria", categoriaId);
         setSearchParams(novosParametros);
     }
 
@@ -198,16 +200,13 @@ function Produtos() {
                         {categorias.map((categoria) => (
                             <button
                                 type="button"
-                                key={categoria}
+                                key={categoria.id || "todas"}
                                 className={
-                                    (categoria === "Todas" && !categoriaSelecionada) ||
-                                    categoria === categoriaSelecionada
-                                        ? "active"
-                                        : ""
+                                    String(categoriaSelecionada) === String(categoria.id) ? "active" : ""
                                 }
-                                onClick={() => selecionarCategoria(categoria)}
+                                onClick={() => selecionarCategoria(categoria.id)}
                             >
-                                {categoria}
+                                {categoria.nome}
                             </button>
                         ))}
                     </div>
@@ -237,10 +236,10 @@ function Produtos() {
                                     >
                                         <option value="">Todas as categorias</option>
                                         {categorias
-                                            .filter((categoria) => categoria !== "Todas")
+                                            .filter((categoria) => categoria.id !== "")
                                             .map((categoria) => (
-                                                <option key={categoria} value={categoria}>
-                                                    {categoria}
+                                                <option key={categoria.id} value={categoria.id}>
+                                                    {categoria.nome}
                                                 </option>
                                             ))}
                                     </select>
@@ -318,7 +317,7 @@ function Produtos() {
                                         {busca
                                             ? `Resultados para "${busca}"`
                                             : categoriaSelecionada
-                                            ? categoriaSelecionada
+                                            ? categorias.find(c => String(c.id) === String(categoriaSelecionada))?.nome || "Produtos"
                                             : "Todos os produtos"}
                                     </h2>
                                     <span>{produtosFiltrados.length} produtos encontrados</span>
