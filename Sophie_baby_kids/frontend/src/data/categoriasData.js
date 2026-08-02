@@ -1,6 +1,3 @@
-// src/data/categoriasData.js
-// Seu colega vai substituir pelos dados reais do backend
-
 export const categoriasData = [
     {
         id: 1,
@@ -18,5 +15,6 @@ export const categoriasData = [
             { id: 19, nome: "Tamanhos", slug: "tamanhos" },
         ]
     },
-    // ... outras categorias
 ];
+
+// arquivo que poderia ser excluído, mas vou deixar pra algo futuro
