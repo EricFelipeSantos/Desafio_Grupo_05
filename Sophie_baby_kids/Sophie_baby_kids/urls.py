@@ -26,5 +26,5 @@ urlpatterns = [
                                                  # e não funcionava a tela de login
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve mídia mesmo em produção (temporário, até configurar storage externo)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
