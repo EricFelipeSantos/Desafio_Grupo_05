@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
-import { FaUserLock, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUserLock, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const BASE_URL = import.meta.env.VITE_API_URL 
     ? import.meta.env.VITE_API_URL.replace('/api', '') 
@@ -18,6 +18,7 @@ function Login() {
     const [senha, setSenha] = useState("");
     const [erro, setErro] = useState("");
     const [loading, setLoading] = useState(false);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const navigate = useNavigate();
 
@@ -107,16 +108,27 @@ function Login() {
                             <label htmlFor="senha">
                                 <FaLock /> Senha
                             </label>
-                            <input
-                                type="password"
-                                id="senha"
-                                placeholder="Digite sua senha"
-                                value={senha}
-                                onChange={(event) => setSenha(event.target.value)}
-                                required
-                                disabled={loading}
-                                autoComplete="current-password"
-                            />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={mostrarSenha ? "text" : "password"}
+                                    id="senha"
+                                    placeholder="Digite sua senha"
+                                    value={senha}
+                                    onChange={(event) => setSenha(event.target.value)}
+                                    required
+                                    disabled={loading}
+                                    autoComplete="current-password"
+                                />
+                                <button
+                                    type="button"
+                                    className="toggle-password-button"
+                                    onClick={() => setMostrarSenha(!mostrarSenha)}
+                                    aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                                    tabIndex={-1}
+                                >
+                                    {mostrarSenha ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </div>
                         </div>
 
                         <button 
