@@ -25,6 +25,3 @@ urlpatterns = [
     path('api/auth/', include('usuarios.urls')), # coloquei auth porque estava dando conflito de rotas
                                                  # e não funcionava a tela de login
 ]
-
-# Serve mídia mesmo em produção (temporário, até configurar storage externo)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
