@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # Alguns campos que estão no CadastroProduto.jsx não estavam aqui:
 # 1 - Preço Promocional: o banco sabia apenas que o produto poderia estar na promoção,
@@ -70,3 +72,8 @@ class ImagemProduto(models.Model):
 
     def __str__(self):
         return f"Imagem de {self.produto.nome}"
+    
+@receiver(post_delete, sender=ImagemProduto)
+def deletar_arquivo_do_supabase(sender, instance, **kwargs):
+    if instance.imagem:
+        instance.imagem.delete(save=False)
