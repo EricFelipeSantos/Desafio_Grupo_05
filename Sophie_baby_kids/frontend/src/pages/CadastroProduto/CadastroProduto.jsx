@@ -10,6 +10,7 @@ import { IoIosClose } from "react-icons/io";
 
 import formatPrice from "../../utils/FormatPrice"
 import { useProducts } from "../../context/ProductContext/ProductContext";
+import { comprimirImagem } from "../../utils/comprimirImagem";
 
 // lista de cores fixas
 const coresFixas = [
@@ -90,13 +91,17 @@ function CadastroProduto() {
         );
     }
 
-    function selecionarImagens(event) {
+    async function selecionarImagens(event) {
         const arquivosSelecionados = Array.from(event.target.files);
+
+        const arquivosComprimidos = await Promise.all(
+            arquivosSelecionados.map((arquivo) => comprimirImagem(arquivo))
+        );
 
         setImagens(
             (imagensAtuais) => [
                 ...imagensAtuais,
-                ...arquivosSelecionados
+                ...arquivosComprimidos
             ]
         );
     }

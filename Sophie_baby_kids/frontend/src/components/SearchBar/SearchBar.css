@@ -1,20 +1,16 @@
 .search-wrapper {
     position: relative;
     width: 100%;
-    max-width: 650px;
-    margin: 0 auto;
-    margin-top: -80px;
+    max-width: 600px;
+    flex: 1;
 }
 
 @media (max-width: 768px) {
     .search-wrapper {
-        margin-top: -20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .search-wrapper {
-        margin-top: -10px;
+        max-width: 100%;
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
     }
 }
 

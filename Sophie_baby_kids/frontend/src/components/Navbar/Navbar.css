@@ -947,9 +947,20 @@
         display: flex;
     }
 
-    /* Busca some no mobile */
+    .navbar-top {
+        flex-wrap: wrap;
+    }
+
+    /* Busca em segunda linha no mobile */
     .search-form {
-        display: none;
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-container {
+        flex-wrap: wrap;
     }
 
     /* Logo fica centralizada */

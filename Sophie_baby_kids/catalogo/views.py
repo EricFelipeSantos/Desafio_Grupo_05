@@ -3,13 +3,14 @@ from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .models import Produto, Categoria, Tamanho, Colecao
+from .models import Produto, Categoria, Tamanho, Colecao, Banner
 from .serializers import (
     ProdutoSerializer,
     ProdutoListSerializer,
     CategoriaSerializer,
     TamanhoSerializer,
-    ColecaoSerializer
+    ColecaoSerializer,
+    BannerSerializer
 )
 
 
@@ -67,3 +68,8 @@ class TamanhoViewSet(ModelViewSet):
 class ColecaoViewSet(ModelViewSet):
     queryset = Colecao.objects.all()
     serializer_class = ColecaoSerializer
+    
+class BannerViewSet(ModelViewSet):
+    queryset = Banner.objects.all()
+    serializer_class = BannerSerializer
+    parser_classes = [MultiPartParser, FormParser]

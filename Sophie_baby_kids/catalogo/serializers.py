@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Produto, Categoria, Tamanho, Colecao, ImagemProduto
+from .models import Produto, Categoria, Tamanho, Colecao, ImagemProduto, Banner
 import json
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -121,4 +121,9 @@ class ProdutoListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Produto
+        fields = "__all__"
+        
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
         fields = "__all__"
