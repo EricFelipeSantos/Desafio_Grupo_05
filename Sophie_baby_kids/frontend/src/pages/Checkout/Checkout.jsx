@@ -84,6 +84,8 @@ function Checkout() {
                 return parcelaSelecionada ? parcelaSelecionada.total : precoTotal;
             case "Boleto":
                 return precoBoleto;
+            case "Dinheiro":
+                return precoTotal;
             default:
                 return precoTotal;
         }
@@ -264,6 +266,7 @@ function Checkout() {
         { id: "Pix", label: "PIX", descricao: `${formatPrice(precoPix)}` },
         { id: "Cartão", label: "Cartão", descricao: `Até ${parcelasDisponiveis}x` },
         { id: "Boleto", label: "Boleto", descricao: `${formatPrice(precoBoleto)}` },
+        { id: "Dinheiro", label: "Dinheiro", descricao: `${formatPrice(precoTotal)}` },
     ];
 
     return (

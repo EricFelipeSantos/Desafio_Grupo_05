@@ -18,14 +18,14 @@ export function ProductProvider({ children }) {
     const [erro, setErro] = useState(null);
 
     const getImageUrl = (imagemPath) => {
-         if (!imagemPath) {
-        console.log("❌ imagemPath é null/undefined");
-        return null;
-    }
+        if (!imagemPath) {
+            // console.log("❌ imagemPath é null/undefined");
+            return null;
+        }
     
-    if (imagemPath.startsWith('http')) {
-        console.log("✅ É URL completa:", imagemPath);
-        return imagemPath;
+        if (imagemPath.startsWith('http')) {
+            // console.log("✅ É URL completa:", imagemPath);
+            return imagemPath;
     }
         
         // remove barras extras e garante o caminho correto
