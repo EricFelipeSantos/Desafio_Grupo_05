@@ -55,7 +55,7 @@ function Footer() {
                     <p>Sábado</p>
                     <p>08:00 às 12:00</p>
                     <h3 className="payment-title">Pagamento</h3>
-                    <p><FaCreditCard /> Pix • Cartão • Dinheiro</p>
+                    <p><FaCreditCard /> Pix • Cartão • Boleto • Dinheiro</p>
                 </div>
             </div>
 
