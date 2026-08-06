@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'sophie-baby-kids-api.onrender.com',
-    'desafio-grupo-05.vercel.app',
+    'sophie-baby-kids.vercel.app',
 ]
 
 # Application definition
@@ -172,7 +172,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://desafio-grupo-05.vercel.app',
+    'https://sophie-baby-kids.vercel.app',
     'https://sophie-baby-kids-api.onrender.com',
 ]
 
