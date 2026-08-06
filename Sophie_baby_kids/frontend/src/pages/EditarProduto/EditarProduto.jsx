@@ -391,14 +391,65 @@ function EditarProduto() {
                                     value={categoria}
                                     onChange={(event) => setCategoria(event.target.value)}
                                 >
-                                    <option value="">Selecione o tipo de peça</option>
-                                    <option value="1">Vestidos</option>
-                                    <option value="2">Conjuntos</option>
-                                    <option value="3">Blusas</option>
-                                    <option value="4">Calças</option>
-                                    <option value="5">Shorts</option>
-                                    <option value="6">Macacões</option>
-                                    <option value="7">Outras peças</option>
+                                    <option value="">
+                                        Selecione o tipo de peça
+                                    </option>
+
+                                    <option value="1">
+                                        Vestidos
+                                    </option>
+
+                                    <option value="2">
+                                        Conjuntos verão
+                                    </option>
+
+                                    <option value="3">
+                                        Pijamas
+                                    </option>
+
+                                    <option value="4">
+                                        Calças jeans
+                                    </option>
+
+                                    <option value="5">
+                                        Shorts
+                                    </option>
+
+                                    <option value="6">
+                                        Leggings
+                                    </option>
+
+                                    <option value="7">
+                                        Bermudas
+                                    </option>
+
+                                    <option value="8">
+                                        Conjuntos manga longa
+                                    </option>
+
+                                    <option value="9">
+                                        Bodys manga longa
+                                    </option>
+
+                                    <option value="10">
+                                        Bodys manga curta
+                                    </option>
+
+                                    <option value="11">
+                                        Mijões
+                                    </option>
+
+                                    <option value="12">
+                                        Tapa fralda
+                                    </option>
+
+                                    <option value="13">
+                                        Saída de maternidade
+                                    </option>
+
+                                    <option value="14">
+                                        Macacões
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -413,7 +464,7 @@ function EditarProduto() {
                                 <option value="F">Meninas</option>
                                 <option value="M">Meninos</option>
                                 <option value="B">Bebês</option>
-                                <option value="U">Unissex</option>
+                                <option value="P">Primeiros Passos</option>
                             </select>
                         </div>
 
@@ -572,8 +623,8 @@ function EditarProduto() {
                                     {cores.map((cor) => (
                                         <div className="selected-color" key={cor.nome}>
                                             <span
-                                                className="color-circle"
-                                                style={{ backgroundColor: cor.codigo }}
+                                                className={`color-circle ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                                style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
                                             />
                                             <span>{cor.nome}</span>
                                             <button type="button" onClick={() => removerCor(cor.nome)}>

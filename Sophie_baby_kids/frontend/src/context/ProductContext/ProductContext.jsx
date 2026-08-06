@@ -7,8 +7,10 @@ import {
 
 const ProductContext = createContext();
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/produtos/";
-const BASE_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace('/api', '') 
+    : "http://127.0.0.1:8000";
+const API_URL = `${BASE_URL}/api/produtos/`;
 
 export function ProductProvider({ children }) {
     const [produtos, setProdutos] = useState([]);
@@ -16,14 +18,14 @@ export function ProductProvider({ children }) {
     const [erro, setErro] = useState(null);
 
     const getImageUrl = (imagemPath) => {
-         if (!imagemPath) {
-        console.log("❌ imagemPath é null/undefined");
-        return null;
-    }
+        if (!imagemPath) {
+            // console.log("❌ imagemPath é null/undefined");
+            return null;
+        }
     
-    if (imagemPath.startsWith('http')) {
-        console.log("✅ É URL completa:", imagemPath);
-        return imagemPath;
+        if (imagemPath.startsWith('http')) {
+            // console.log("✅ É URL completa:", imagemPath);
+            return imagemPath;
     }
         
         // remove barras extras e garante o caminho correto
@@ -164,11 +166,8 @@ export function ProductProvider({ children }) {
                 throw new Error(textoResposta || "Erro ao cadastrar produto.");
             }
 
-            const dados = JSON.parse(textoResposta);
-            const produtoCompleto = await buscarProdutoPorId(dados.id);
-            setProdutos((produtosAtuais) => [...produtosAtuais, produtoCompleto]);
-
-            return produtoCompleto;
+            // recarrega a lista inteira em vez de buscar só o produto novo
+            await buscarProdutos();
 
         } catch (erro) {
             console.error("Erro ao adicionar produto:", erro);

@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # Alguns campos que estão no CadastroProduto.jsx não estavam aqui:
 # 1 - Preço Promocional: o banco sabia apenas que o produto poderia estar na promoção,
@@ -70,3 +72,24 @@ class ImagemProduto(models.Model):
 
     def __str__(self):
         return f"Imagem de {self.produto.nome}"
+    
+@receiver(post_delete, sender=ImagemProduto)
+def deletar_arquivo_do_supabase(sender, instance, **kwargs):
+    if instance.imagem:
+        instance.imagem.delete(save=False)
+        
+class Banner(models.Model):
+    imagem = models.ImageField(upload_to='banners/')
+    ordem = models.IntegerField(default=0)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['ordem', 'criado_em']
+
+    def __str__(self):
+        return f"Banner #{self.id}"
+
+@receiver(post_delete, sender=Banner)
+def deletar_banner_do_supabase(sender, instance, **kwargs):
+    if instance.imagem:
+        instance.imagem.delete(save=False)

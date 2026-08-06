@@ -25,6 +25,3 @@ urlpatterns = [
     path('api/auth/', include('usuarios.urls')), # coloquei auth porque estava dando conflito de rotas
                                                  # e não funcionava a tela de login
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,6 +10,7 @@ import { IoIosClose } from "react-icons/io";
 
 import formatPrice from "../../utils/FormatPrice"
 import { useProducts } from "../../context/ProductContext/ProductContext";
+import { comprimirImagem } from "../../utils/comprimirImagem";
 
 // lista de cores fixas
 const coresFixas = [
@@ -90,13 +91,17 @@ function CadastroProduto() {
         );
     }
 
-    function selecionarImagens(event) {
+    async function selecionarImagens(event) {
         const arquivosSelecionados = Array.from(event.target.files);
+
+        const arquivosComprimidos = await Promise.all(
+            arquivosSelecionados.map((arquivo) => comprimirImagem(arquivo))
+        );
 
         setImagens(
             (imagensAtuais) => [
                 ...imagensAtuais,
-                ...arquivosSelecionados
+                ...arquivosComprimidos
             ]
         );
     }
@@ -306,15 +311,15 @@ function CadastroProduto() {
                                     </option>
 
                                     <option value="2">
-                                        Conjuntos
+                                        Conjuntos verão
                                     </option>
 
                                     <option value="3">
-                                        Blusas
+                                        Pijamas
                                     </option>
 
                                     <option value="4">
-                                        Calças
+                                        Calças jeans
                                     </option>
 
                                     <option value="5">
@@ -322,11 +327,39 @@ function CadastroProduto() {
                                     </option>
 
                                     <option value="6">
-                                        Macacões
+                                        Leggings
                                     </option>
 
                                     <option value="7">
-                                        Outras peças
+                                        Bermudas
+                                    </option>
+
+                                    <option value="8">
+                                        Conjuntos manga longa
+                                    </option>
+
+                                    <option value="9">
+                                        Bodys manga longa
+                                    </option>
+
+                                    <option value="10">
+                                        Bodys manga curta
+                                    </option>
+
+                                    <option value="11">
+                                        Mijões
+                                    </option>
+
+                                    <option value="12">
+                                        Tapa fralda
+                                    </option>
+
+                                    <option value="13">
+                                        Saída de maternidade
+                                    </option>
+
+                                    <option value="14">
+                                        Macacões
                                     </option>
                                 </select>
                             </div>
@@ -359,8 +392,8 @@ function CadastroProduto() {
                                     Bebês
                                 </option>
 
-                                <option value="U">
-                                    Unissex
+                                <option value="P">
+                                    Primeiros Passos
                                 </option>
                             </select>
                         </div>
@@ -538,8 +571,8 @@ function CadastroProduto() {
                                     {cores.map((cor) => (
                                         <div className="selected-color" key={cor.nome}>
                                             <span
-                                                className="color-circle"
-                                                style={{ backgroundColor: cor.codigo }}
+                                                className={`color-circle ${cor.nome === "Colorido" ? "colorido" : ""}`}
+                                                style={cor.nome === "Colorido" ? {} : { backgroundColor: cor.codigo }}
                                             />
                                             <span>{cor.nome}</span>
                                             <button type="button" onClick={() => removerCor(cor.nome)}>
@@ -629,6 +662,7 @@ function CadastroProduto() {
 
                                                 <button
                                                     type="button"
+                                                    className="remove-image-btn"
                                                     onClick={() =>
                                                         removerImagem(index)}
                                                 >

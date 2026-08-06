@@ -1,5 +1,3 @@
-// src/pages/Home/Home.jsx
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +11,6 @@ import WhatsAppButton from "../../components/WhatsAppButton/WhatsAppButton";
 
 import { useProducts } from "../../context/ProductContext/ProductContext";
 
-// IMPORTAR AS CATEGORIAS DO NAVBAR
 import { publicoCategorias } from "../../data/publicoCategoriaData";
 
 import "./Home.css";
@@ -24,13 +21,23 @@ function Home() {
 
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
 
-    // MAPEAMENTO PÚBLICO -> NOME
     const publicoMap = {
         'U': 'Primeiros Passos',
         'F': 'Meninas',
         'M': 'Meninos',
         'B': 'Bebês'
     };
+
+    // MONTA A LISTA DE SUBCATEGORIAS ÚNICAS, A PARTIR DO publicoCategoriaData
+    const nomesSubcategorias = [
+        ...new Set(
+            publicoCategorias.flatMap((publico) =>
+                publico.categorias.map((categoria) => categoria.nome)
+            )
+        )
+    ];
+
+    const categoriasDisponiveis = ["Todos", "Promoções", ...nomesSubcategorias];
 
     function selecionarCategoria(categoria) {
         setCategoriaSelecionada(categoria);
@@ -40,7 +47,6 @@ function Home() {
         navigate("/produtos");
     }
 
-    // FILTRA PRODUTOS PELA CATEGORIA SELECIONADA
     const produtosFiltrados = produtos.filter((produto) => {
         if (categoriaSelecionada === "Todos") {
             return true;
@@ -54,9 +60,15 @@ function Home() {
             );
         }
 
-        // FILTRA PELO PÚBLICO
         const nomePublico = publicoMap[produto.publico] || "";
-        return nomePublico === categoriaSelecionada;
+        if (nomePublico === categoriaSelecionada) {
+            return true;
+        }
+
+        const nomeCategoriaProduto = produto.categoria?.nome?.trim().toLowerCase() || "";
+        const categoriaSelecionadaNormalizada = categoriaSelecionada.trim().toLowerCase();
+
+        return nomeCategoriaProduto === categoriaSelecionadaNormalizada;
     });
 
     if (carregando) {
@@ -76,19 +88,15 @@ function Home() {
             <Navbar />
 
             <main className="home-page">
-                {/* HERO SECTION - OCUPA A MAIOR PARTE DA TELA */}
                 <HeroSection />
-
-                {/* BANNER DE PROMOÇÃO */}
                 <PromotionBanner />
 
-                {/* CATEGORY SECTION COM AS CATEGORIAS DO NAVBAR */}
                 <CategorySection
                     categoriaSelecionada={categoriaSelecionada}
                     onCategoriaSelecionada={selecionarCategoria}
+                    categoriasDisponiveis={categoriasDisponiveis}
                 />
 
-                {/* PRODUTOS */}
                 <ProductsSection
                     produtos={produtosFiltrados}
                     categoriaSelecionada={categoriaSelecionada}

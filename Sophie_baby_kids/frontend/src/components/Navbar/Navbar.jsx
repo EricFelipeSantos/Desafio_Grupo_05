@@ -2,6 +2,8 @@ import "./Navbar.css";
 
 import logo from "../../assets/logo.png";
 
+import SearchBar from "../SearchBar/SearchBar"
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -14,7 +16,6 @@ import {
     FaTimes,
     FaShoppingCart,
     FaChevronDown,
-    FaSearch,
     FaHome,
     FaStore,
     FaEnvelope,
@@ -32,7 +33,6 @@ function Navbar() {
     const [menuAberto, setMenuAberto] = useState(false);
     const [usuarioMenuAberto, setUsuarioMenuAberto] = useState(false);
     const [publicoAtivo, setPublicoAtivo] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
     const [filtroAberto, setFiltroAberto] = useState(false);
     const [filtros, setFiltros] = useState({
         publico: "",
@@ -115,18 +115,10 @@ function Navbar() {
         setPublicoAtivo(null);
     }
 
-    function handleCategoriaClick(publicoId, categoriaSlug) {
-        navigate(`/produtos?publico=${publicoId}&categoria=${categoriaSlug}`);
+    function handleCategoriaClick(publicoId, categoriaId) {
+        navigate(`/produtos?publico=${publicoId}&categoria=${categoriaId}`);
         setMenuAberto(false);
         setPublicoAtivo(null);
-    }
-
-    function handleSearch(e) {
-        e.preventDefault();
-        if (searchTerm.trim()) {
-            navigate(`/produtos?busca=${encodeURIComponent(searchTerm.trim())}`);
-            setSearchTerm("");
-        }
     }
 
     function handleFiltroChange(e) {
@@ -178,18 +170,7 @@ function Navbar() {
                     </Link>
 
                     {/* BARRA DE PESQUISA */}
-                    <form className="search-form" onSubmit={handleSearch}>
-                        <input
-                            type="text"
-                            placeholder="O que você está procurando?"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
-                        />
-                        <button type="submit" className="search-button">
-                            <FaSearch />
-                        </button>
-                    </form>
+                    <SearchBar />
 
                     <div className="navbar-actions">
                         <Link to="/carrinho" className="cart-icon">
@@ -260,7 +241,7 @@ function Navbar() {
                                                     <button
                                                         key={categoria.id}
                                                         className="subcategory-link"
-                                                        onClick={() => handleCategoriaClick(publico.id, categoria.slug)}
+                                                        onClick={() => handleCategoriaClick(publico.id, categoria.id)}
                                                     >
                                                         {categoria.nome}
                                                     </button>
@@ -448,7 +429,7 @@ function Navbar() {
                                 {publico.categorias.map((cat) => (
                                     <Link
                                         key={cat.id}
-                                        to={`/produtos?publico=${publico.id}&categoria=${cat.slug}`}
+                                        to={`/produtos?publico=${publico.id}&categoria=${cat.id}`}
                                         onClick={fecharMenu}
                                         className="mobile-subcategory-link"
                                     >
