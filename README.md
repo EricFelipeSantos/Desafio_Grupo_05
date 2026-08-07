@@ -126,7 +126,7 @@ npm run dev
 
 ## 👥 Autoria
 
-Desenvolvido por [Seu Nome] e [Nome da Colega], como parte da segunda fase do programa Bolsa Futuro Digital, em parceria direta com a cliente Sophie Baby Kids.
+Desenvolvido por Maria Eduarda Saldanha Alves e Eric Felipe Santos, como parte da segunda fase do programa Bolsa Futuro Digital, em parceria direta com a cliente Sophie Baby Kids.
 
 ## 📄 Licença
 
