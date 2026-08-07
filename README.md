@@ -6,6 +6,10 @@ E-commerce de roupas infantis com painel administrativo completo para gerenciame
 
 Este projeto foi desenvolvido como parte da segunda fase do programa **Bolsa Futuro Digital**, na qual a entrega é feita diretamente para uma cliente real. O sistema foi construído para atender às necessidades da **Sophie Baby Kids**, uma loja de roupas infantis, oferecendo tanto uma vitrine de produtos para os clientes finais quanto um painel administrativo completo para a gestão do catálogo, banners promocionais e pedidos realizados.
 
+## 🔗 Acesse o site
+
+**[Sophie Baby Kids](https://sophie-baby-kids.vercel.app)**
+
 ## 🚀 Tecnologias
 
 ### Frontend
@@ -122,7 +126,7 @@ npm run dev
 
 ## 👥 Autoria
 
-Desenvolvido por Maria Eduarda Saldanha Alves e Eric Felipe Santos, como parte da segunda fase do programa Bolsa Futuro Digital, em parceria direta com a cliente Sophie Baby Kids.
+Desenvolvido por [Seu Nome] e [Nome da Colega], como parte da segunda fase do programa Bolsa Futuro Digital, em parceria direta com a cliente Sophie Baby Kids.
 
 ## 📄 Licença
 
